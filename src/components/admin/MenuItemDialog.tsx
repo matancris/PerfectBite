@@ -19,6 +19,7 @@ const menuItemSchema = z.object({
   categoryId: z.string().optional(),
   imageUrl: z.string().url('כתובת URL לא תקינה').optional().or(z.literal('')),
   isActive: z.boolean(),
+  availableAnytime: z.boolean(),
 })
 
 type FormData = z.infer<typeof menuItemSchema>
@@ -41,6 +42,7 @@ export function MenuItemDialog({ item, categories, onClose }: MenuItemDialogProp
       categoryId: item?.categoryId ?? '',
       imageUrl: item?.imageUrl ?? '',
       isActive: item?.isActive ?? true,
+      availableAnytime: item?.availableAnytime ?? false,
     },
   })
 
@@ -54,6 +56,7 @@ export function MenuItemDialog({ item, categories, onClose }: MenuItemDialogProp
           categoryId: data.categoryId || undefined,
           imageUrl: data.imageUrl || undefined,
           isActive: data.isActive,
+          availableAnytime: data.availableAnytime,
         })
         showSuccess('הפריט עודכן בהצלחה')
       } else {
@@ -65,6 +68,7 @@ export function MenuItemDialog({ item, categories, onClose }: MenuItemDialogProp
           categoryId: data.categoryId || undefined,
           imageUrl: data.imageUrl || undefined,
           isActive: data.isActive,
+          availableAnytime: data.availableAnytime,
         })
         showSuccess('הפריט נוסף בהצלחה')
       }
@@ -148,6 +152,16 @@ export function MenuItemDialog({ item, categories, onClose }: MenuItemDialogProp
             <input type="checkbox" {...register('isActive')} />
             <span>פריט פעיל</span>
           </label>
+        </div>
+
+        <div className="menu-item-dialog__field">
+          <label className="menu-item-dialog__checkbox">
+            <input type="checkbox" {...register('availableAnytime')} />
+            <span>זמין להזמנה תמיד (ללא אירוע)</span>
+          </label>
+          <p className="menu-item-dialog__hint">
+            סמנו אם הפריט זמין להזמנה גם כשאין אירוע פעיל
+          </p>
         </div>
       </form>
     </AppDialog>

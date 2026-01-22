@@ -1,9 +1,16 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCartStore } from '@/stores/cart.store'
 import { formatCurrency } from '@/utils/formatters'
 import { AppButton, Icon } from '@/components/ui'
 import { CartItem } from './CartItem'
+import { eventService } from '@/services/event.service'
+import { useToast } from '@/hooks/useToast'
+
+interface StockLimit {
+  menuItemId: string
+  maxQuantity: number
+}
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -16,12 +23,60 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const clearCart = useCartStore((state) => state.clearCart)
   const updateQuantity = useCartStore((state) => state.updateQuantity)
   const removeItem = useCartStore((state) => state.removeItem)
+  const eventId = useCartStore((state) => state.eventId)
+  const { showError } = useToast()
+  
+  const [stockLimits, setStockLimits] = useState<StockLimit[]>([])
+
+  // Fetch stock limits for event items
+  useEffect(() => {
+    async function fetchStockLimits() {
+      if (!eventId) {
+        setStockLimits([])
+        return
+      }
+
+      const result = await eventService.getEventMenuItems(eventId)
+      if (result.data) {
+        setStockLimits(
+          result.data.map((item) => ({
+            menuItemId: item.id,
+            maxQuantity: item.remainingQuantity,
+          }))
+        )
+      }
+    }
+    
+    if (isOpen) {
+      fetchStockLimits()
+    }
+  }, [eventId, isOpen])
+
+  const getMaxQuantity = useCallback(
+    (menuItemId: string) => {
+      const limit = stockLimits.find((l) => l.menuItemId === menuItemId)
+      return limit?.maxQuantity
+    },
+    [stockLimits]
+  )
 
   const handleQuantityChange = useCallback(
-    (itemId: string, quantity: number) => {
+    (itemId: string, menuItemId: string, quantity: number) => {
+      if (quantity <= 0) {
+        removeItem(itemId)
+        return
+      }
+
+      // Check stock limit for event items
+      const maxQty = getMaxQuantity(menuItemId)
+      if (maxQty !== undefined && quantity > maxQty) {
+        showError(`לא ניתן להוסיף עוד. נותרו רק ${maxQty} יחידות`)
+        return
+      }
+
       updateQuantity(itemId, quantity)
     },
-    [updateQuantity]
+    [updateQuantity, removeItem, getMaxQuantity, showError]
   )
 
   const handleRemove = useCallback(
@@ -59,6 +114,7 @@ export function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     item={item}
                     onQuantityChange={handleQuantityChange}
                     onRemove={handleRemove}
+                    maxQuantity={getMaxQuantity(item.menuItemId)}
                   />
                 ))}
               </ul>

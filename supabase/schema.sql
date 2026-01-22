@@ -46,6 +46,8 @@ CREATE TABLE events (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     event_date DATE NOT NULL,
+    start_time VARCHAR(10) NOT NULL DEFAULT '17:00',
+    end_time VARCHAR(10) NOT NULL DEFAULT '19:00',
     order_deadline TIMESTAMPTZ NOT NULL,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMPTZ DEFAULT NOW()
@@ -58,6 +60,7 @@ CREATE TABLE event_items (
     menu_item_id UUID NOT NULL REFERENCES menu_items(id) ON DELETE CASCADE,
     custom_price DECIMAL(10, 2),
     max_quantity INTEGER,
+    current_quantity INTEGER DEFAULT 0,
     UNIQUE(event_id, menu_item_id)
 );
 

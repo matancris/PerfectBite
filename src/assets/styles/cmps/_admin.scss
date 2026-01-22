@@ -267,6 +267,7 @@
   }
   
   table {
+    width: 100%;
     min-width: 700px;
   }
   
@@ -283,6 +284,7 @@
   td {
     padding: $spacing-md;
     border-bottom: 1px solid $border-color;
+    vertical-align: middle;
   }
   
   tr:hover td {
@@ -296,6 +298,7 @@
   
   &__actions {
     display: flex;
+    align-items: center;
     gap: $spacing-xs;
   }
   
@@ -463,9 +466,42 @@
     gap: $spacing-md;
   }
   
+  &__section {
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    padding: $spacing-md;
+    margin-bottom: $spacing-md;
+    
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      font-size: $font-size-md;
+      font-weight: 600;
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-sm;
+      border-bottom: 1px solid $border-color;
+      
+      .material-symbols-outlined {
+        color: $primary;
+      }
+    }
+  }
+  
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+  
   &__field {
     display: flex;
     flex-direction: column;
+    margin-bottom: $spacing-md;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   
   &__checkbox {
@@ -473,11 +509,267 @@
     align-items: center;
     gap: $spacing-sm;
     cursor: pointer;
+    padding: $spacing-sm;
+    background: $surface-light;
+    border-radius: $radius-md;
     
     input {
       width: 18px;
       height: 18px;
       accent-color: $primary;
+    }
+  }
+  
+  &__section-hint {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__hint {
+    font-size: $font-size-xs;
+    color: $text-tertiary;
+    margin-top: $spacing-xs;
+    padding-right: $spacing-sm;
+  }
+  
+  &__slot-generator {
+    background: $surface-light;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-md;
+    
+    &-row {
+      display: flex;
+      align-items: flex-end;
+      gap: $spacing-md;
+      flex-wrap: wrap;
+    }
+    
+    &-field {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      
+      label {
+        font-size: $font-size-xs;
+        color: $text-secondary;
+      }
+      
+      input {
+        width: 80px;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        text-align: center;
+        
+        &:focus {
+          border-color: $primary;
+          outline: none;
+        }
+      }
+    }
+  }
+  
+  &__empty-slots {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-sm;
+    padding: $spacing-lg;
+    background: $surface-light;
+    border-radius: $radius-md;
+    color: $text-secondary;
+    text-align: center;
+    margin-bottom: $spacing-sm;
+    
+    span {
+      font-size: $font-size-sm;
+      opacity: 0.7;
+    }
+  }
+  
+  &__slots-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__slot {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-xs $spacing-sm;
+    background: $white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    
+    &-time {
+      input {
+        width: 80px;
+        padding: $spacing-xs;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        font-size: $font-size-sm;
+        text-align: center;
+        
+        &:focus {
+          border-color: $primary;
+          outline: none;
+        }
+      }
+    }
+    
+    &-max {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      
+      label {
+        font-size: $font-size-xs;
+        color: $text-secondary;
+      }
+      
+      input {
+        width: 50px;
+        padding: $spacing-xs;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        font-size: $font-size-sm;
+        text-align: center;
+        
+        &:focus {
+          border-color: $primary;
+          outline: none;
+        }
+      }
+    }
+    
+    &-remove {
+      color: $text-tertiary;
+      padding: $spacing-xs;
+      cursor: pointer;
+      background: none;
+      border: none;
+      
+      &:hover {
+        color: $danger;
+      }
+    }
+  }
+  
+  &__item-selector {
+    margin-bottom: $spacing-md;
+    
+    select {
+      width: 100%;
+      padding: $spacing-sm $spacing-md;
+      border: 1px solid $border-color;
+      border-radius: $radius-md;
+      font-size: $font-size-md;
+      
+      &:focus {
+        border-color: $primary;
+        outline: none;
+      }
+    }
+  }
+  
+  &__empty-items {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-sm;
+    padding: $spacing-xl;
+    background: $surface-light;
+    border-radius: $radius-md;
+    color: $text-secondary;
+    text-align: center;
+    
+    span {
+      font-size: $font-size-sm;
+      opacity: 0.7;
+    }
+  }
+  
+  &__items-list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+  
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-sm;
+    background: $surface-light;
+    border-radius: $radius-md;
+    
+    &-image {
+      width: 40px;
+      height: 40px;
+      border-radius: $radius-sm;
+      object-fit: cover;
+    }
+    
+    &-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    &-name {
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    &-price {
+      font-size: $font-size-sm;
+      color: $primary;
+    }
+    
+    &-quantity {
+      display: flex;
+      align-items: center;
+      gap: $spacing-xs;
+      
+      label {
+        font-size: $font-size-xs;
+        color: $text-secondary;
+      }
+      
+      input {
+        width: 60px;
+        padding: $spacing-xs $spacing-sm;
+        border: 1px solid $border-color;
+        border-radius: $radius-sm;
+        text-align: center;
+        
+        &:focus {
+          border-color: $primary;
+          outline: none;
+        }
+      }
+    }
+    
+    &-remove {
+      color: $text-tertiary;
+      padding: $spacing-xs;
+      background: none;
+      border: none;
+      cursor: pointer;
+      
+      &:hover {
+        color: $danger;
+      }
     }
   }
   
@@ -601,7 +893,7 @@
 .pickup-slots-page {
   &__header {
     @include flex-between;
-    margin-bottom: $spacing-lg;
+    margin-bottom: $spacing-xl;
   }
   
   &__title {
@@ -611,10 +903,17 @@
   &__content {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: $spacing-lg;
+    gap: $spacing-xl;
     
-    @include md {
+    @media (max-width: 900px) {
       grid-template-columns: 1fr;
+    }
+  }
+  
+  &__generator,
+  &__list {
+    .app-card {
+      padding: $spacing-lg;
     }
   }
   
@@ -625,6 +924,10 @@
     font-size: $font-size-lg;
     font-weight: 600;
     margin-bottom: $spacing-sm;
+    
+    .material-symbols-outlined {
+      color: $primary;
+    }
   }
   
   &__section-desc {
@@ -643,13 +946,13 @@
   &__form-field {
     display: flex;
     flex-direction: column;
+    gap: $spacing-xs;
     margin-bottom: $spacing-md;
     
     label {
       font-size: $font-size-sm;
       font-weight: 500;
       color: $text-secondary;
-      margin-bottom: $spacing-xs;
     }
   }
   
@@ -660,9 +963,12 @@
     font-size: $font-size-sm;
     color: $warning;
     margin-top: $spacing-md;
+    padding: $spacing-sm;
+    background: rgba($warning, 0.1);
+    border-radius: $radius-md;
     
-    .material-symbols-rounded {
-      font-size: 18px;
+    .material-symbols-outlined {
+      font-size: 16px;
     }
   }
   
@@ -671,7 +977,7 @@
     @include flex-center;
     flex-direction: column;
     gap: $spacing-md;
-    padding: $spacing-xxl;
+    padding: $spacing-xl;
     color: $text-secondary;
     text-align: center;
     
@@ -683,7 +989,7 @@
   
   &__slots {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: $spacing-md;
   }
   
@@ -692,14 +998,15 @@
     inset: 0;
     background: rgba($black, 0.5);
     @include flex-center;
-    z-index: $z-modal;
+    z-index: 100;
   }
   
   &__modal {
-    @include card;
-    padding: $spacing-lg;
-    width: 100%;
-    max-width: 400px;
+    background: $white;
+    padding: $spacing-xl;
+    border-radius: $radius-lg;
+    min-width: 320px;
+    max-width: 90vw;
     
     h3 {
       font-size: $font-size-lg;
@@ -716,50 +1023,64 @@
   }
 }
 
+// Pickup Slot Card
 .pickup-slot-card {
-  @include card;
-  padding: $spacing-md;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
+  padding: $spacing-md;
+  background: $surface-light;
+  border-radius: $radius-lg;
+  border: 1px solid $border-color;
+  transition: all $transition-fast;
+  
+  &:hover {
+    border-color: $primary-light;
+    box-shadow: $shadow-sm;
+  }
   
   &--full {
-    opacity: 0.7;
-    background: $surface-light;
+    background: rgba($danger, 0.05);
+    border-color: rgba($danger, 0.3);
   }
   
   &__time {
     display: flex;
     align-items: center;
-    gap: $spacing-xs;
-    font-size: $font-size-lg;
-    font-weight: 600;
+    gap: $spacing-sm;
+    font-size: $font-size-xl;
+    font-weight: 700;
     color: $primary;
+    margin-bottom: $spacing-sm;
+    
+    .material-symbols-outlined {
+      color: $text-secondary;
+    }
   }
   
   &__stats {
     display: flex;
-    align-items: baseline;
-    gap: $spacing-xs;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: $spacing-sm;
   }
   
   &__count {
     display: flex;
     align-items: baseline;
+    gap: 2px;
   }
   
   &__current {
-    font-size: $font-size-xl;
-    font-weight: 700;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $text-primary;
   }
   
   &__separator {
-    margin: 0 2px;
     color: $text-tertiary;
   }
   
   &__max {
+    font-size: $font-size-sm;
     color: $text-secondary;
   }
   
@@ -770,9 +1091,10 @@
   
   &__progress {
     height: 4px;
-    background: $surface-light;
+    background: $border-color;
     border-radius: $radius-full;
     overflow: hidden;
+    margin-top: $spacing-sm;
   }
   
   &__progress-bar {
@@ -790,28 +1112,29 @@
     position: absolute;
     top: $spacing-sm;
     left: $spacing-sm;
+    padding: 2px $spacing-xs;
     background: $danger;
     color: $white;
-    padding: 2px $spacing-sm;
-    border-radius: $radius-full;
     font-size: $font-size-xs;
     font-weight: 600;
+    border-radius: $radius-sm;
   }
   
   &__delete {
     position: absolute;
     top: $spacing-sm;
     right: $spacing-sm;
+    padding: $spacing-xs;
     color: $text-tertiary;
-    opacity: 0;
-    transition: opacity $transition-fast;
-    
-    .pickup-slot-card:hover & {
-      opacity: 1;
-    }
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: $radius-sm;
+    transition: all $transition-fast;
     
     &:hover {
       color: $danger;
+      background: rgba($danger, 0.1);
     }
   }
 }

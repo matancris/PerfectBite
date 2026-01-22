@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase'
 import type { Order, OrderStatus, OrderFormData, CartItem, ApiResponse } from '@/types'
 import { mapOrder } from '@/utils/mappers'
 import { pickupSlotsService } from './pickupSlots.service'
+import { eventService } from './event.service'
 
 export const orderService = {
   async getOrders(): Promise<ApiResponse<Order[]>> {
@@ -11,7 +12,6 @@ export const orderService = {
         .select(`
           *,
           order_items (*),
-          pickup_slots (*),
           payments (*)
         `)
         .order('created_at', { ascending: false })
@@ -33,7 +33,6 @@ export const orderService = {
         .select(`
           *,
           order_items (*),
-          pickup_slots (*),
           payments (*)
         `)
         .eq('id', orderId)
@@ -55,6 +54,42 @@ export const orderService = {
     eventId?: string | null
   ): Promise<ApiResponse<Order>> {
     try {
+      // VALIDATION 1: Check pickup slot availability
+      if (formData.pickupSlotId) {
+        const isEventSlot = !!eventId
+        const tableName = isEventSlot ? 'event_pickup_slots' : 'pickup_slots'
+        
+        const { data: slot, error: slotError } = await supabase
+          .from(tableName)
+          .select('current_orders, max_orders')
+          .eq('id', formData.pickupSlotId)
+          .single()
+
+        if (slotError) {
+          return { data: null, error: 'שעת האיסוף שנבחרה אינה זמינה' }
+        }
+
+        if (slot.current_orders >= slot.max_orders) {
+          return { data: null, error: 'שעת האיסוף שנבחרה מלאה. אנא בחרו שעה אחרת.' }
+        }
+      }
+
+      // VALIDATION 2: Check item stock for event orders
+      if (eventId) {
+        const eventItemsResult = await eventService.getEventMenuItems(eventId)
+        if (eventItemsResult.data) {
+          for (const cartItem of items) {
+            const eventItem = eventItemsResult.data.find((ei) => ei.id === cartItem.menuItemId)
+            if (eventItem && cartItem.quantity > eventItem.remainingQuantity) {
+              return {
+                data: null,
+                error: `הפריט "${cartItem.name}" אזל מהמלאי. נותרו רק ${eventItem.remainingQuantity} יחידות.`,
+              }
+            }
+          }
+        }
+      }
+
       const totalAmount = items.reduce(
         (sum, item) => sum + item.price * item.quantity,
         0
@@ -104,7 +139,27 @@ export const orderService = {
 
       // Increment pickup slot order count
       if (formData.pickupSlotId) {
-        await pickupSlotsService.incrementSlotOrders(formData.pickupSlotId)
+        const isEventSlot = !!eventId
+        const incrementResult = await pickupSlotsService.incrementSlotOrders(formData.pickupSlotId, isEventSlot)
+        if (incrementResult.error) {
+          // Rollback if slot is full (race condition)
+          await supabase.from('order_items').delete().eq('order_id', order.id)
+          await supabase.from('orders').delete().eq('id', order.id)
+          return { data: null, error: incrementResult.error }
+        }
+      }
+
+      // Increment event item quantities
+      if (eventId) {
+        const eventItemsResult = await eventService.getEventItems(eventId)
+        if (eventItemsResult.data) {
+          for (const cartItem of items) {
+            const eventItem = eventItemsResult.data.find((ei) => ei.menuItemId === cartItem.menuItemId)
+            if (eventItem) {
+              await eventService.incrementEventItemQuantity(eventItem.id, cartItem.quantity)
+            }
+          }
+        }
       }
 
       // Fetch complete order

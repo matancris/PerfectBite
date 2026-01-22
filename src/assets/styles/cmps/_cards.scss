@@ -56,3 +56,105 @@
     background: $surface-light;
   }
 }
+
+// Menu Item Card
+.menu-item-card {
+  &--out-of-stock {
+    opacity: 0.6;
+    
+    .app-card__image::after {
+      content: 'אזל';
+      position: absolute;
+      top: $spacing-sm;
+      right: $spacing-sm;
+      background: $danger;
+      color: $white;
+      padding: $spacing-xs $spacing-sm;
+      border-radius: $radius-full;
+      font-size: $font-size-xs;
+      font-weight: 600;
+    }
+  }
+  
+  &--view-only {
+    position: relative;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba($white, 0.4);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .menu-item-card__footer {
+      position: relative;
+      z-index: 2;
+    }
+  }
+  
+  &__content {
+    padding: $spacing-md;
+  }
+  
+  &__name {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__description {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  &__stock {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    color: $warning;
+    background: rgba($warning, 0.1);
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-full;
+    margin-bottom: $spacing-sm;
+    
+    .material-symbols-outlined {
+      font-size: 14px;
+    }
+  }
+  
+  &__availability-note {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    color: $text-secondary;
+    background: $surface-light;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-sm;
+    
+    .material-symbols-outlined {
+      font-size: 14px;
+      color: $primary;
+    }
+  }
+  
+  &__footer {
+    @include flex-between;
+    margin-top: auto;
+  }
+  
+  &__price {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: $primary;
+  }
+}

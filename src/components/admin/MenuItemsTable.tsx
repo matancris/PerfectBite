@@ -41,6 +41,7 @@ export function MenuItemsTable({ items, onEdit }: MenuItemsTableProps) {
             <th>שם</th>
             <th>מחיר</th>
             <th>סטטוס</th>
+            <th>זמינות</th>
             <th>פעולות</th>
           </tr>
         </thead>
@@ -65,17 +66,24 @@ export function MenuItemsTable({ items, onEdit }: MenuItemsTableProps) {
                   {item.isActive ? 'פעיל' : 'לא פעיל'}
                 </AppBadge>
               </td>
-              <td className="menu-items-table__actions">
-                <AppButton variant="ghost" size="sm" onClick={() => onEdit(item)}>
-                  ערוך
-                </AppButton>
-                <AppButton
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleDelete(item)}
-                >
-                  <Icon name="delete" size="sm" />
-                </AppButton>
+              <td>
+                <AppBadge variant={item.availableAnytime ? 'info' : 'warning'}>
+                  {item.availableAnytime ? 'תמיד' : 'אירועים'}
+                </AppBadge>
+              </td>
+              <td>
+                <div className="menu-items-table__actions">
+                  <AppButton variant="ghost" size="sm" onClick={() => onEdit(item)}>
+                    ערוך
+                  </AppButton>
+                  <AppButton
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDelete(item)}
+                  >
+                    <Icon name="delete" size="sm" />
+                  </AppButton>
+                </div>
               </td>
             </tr>
           ))}

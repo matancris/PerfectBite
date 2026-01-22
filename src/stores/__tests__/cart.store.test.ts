@@ -9,6 +9,7 @@ const mockMenuItem: MenuItem = {
   description: 'Delicious pizza',
   price: 50,
   isActive: true,
+  availableAnytime: false,
   createdAt: new Date().toISOString(),
 }
 

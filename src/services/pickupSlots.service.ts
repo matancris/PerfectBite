@@ -34,19 +34,45 @@ export const pickupSlotsService = {
 
   async getAvailableSlots(eventId?: string): Promise<ApiResponse<PickupSlot[]>> {
     try {
-      let query = supabase
+      // If event ID is provided, fetch from event_pickup_slots table
+      if (eventId) {
+        console.log('[PickupSlotsService] Fetching event pickup slots for eventId:', eventId)
+        const { data, error } = await supabase
+          .from('event_pickup_slots')
+          .select('*')
+          .eq('event_id', eventId)
+          .order('time')
+
+        console.log('[PickupSlotsService] Raw event pickup slots:', { data, error })
+
+        if (error) {
+          console.error('[PickupSlotsService] Error:', error.message)
+          return { data: null, error: error.message }
+        }
+
+        // Filter out slots that have reached their max and map to PickupSlot format
+        const availableSlots = (data ?? [])
+          .filter((slot) => slot.current_orders < slot.max_orders)
+          .map((slot) => ({
+            id: slot.id,
+            businessId: BUSINESS_ID,
+            eventId: slot.event_id,
+            time: slot.time,
+            maxOrders: slot.max_orders,
+            currentOrders: slot.current_orders ?? 0,
+          }))
+
+        console.log('[PickupSlotsService] Available slots:', availableSlots)
+        return { data: availableSlots, error: null }
+      }
+
+      // Otherwise fetch from regular pickup_slots table
+      const { data, error } = await supabase
         .from('pickup_slots')
         .select('*')
         .eq('business_id', BUSINESS_ID)
+        .is('event_id', null)
         .order('time')
-
-      if (eventId) {
-        query = query.eq('event_id', eventId)
-      } else {
-        query = query.is('event_id', null)
-      }
-
-      const { data, error } = await query
 
       if (error) {
         return { data: null, error: error.message }
@@ -160,26 +186,32 @@ export const pickupSlotsService = {
     }
   },
 
-  async incrementSlotOrders(slotId: string): Promise<ApiResponse<boolean>> {
+  async incrementSlotOrders(slotId: string, isEventSlot = false): Promise<ApiResponse<boolean>> {
     try {
-      const { error } = await supabase.rpc('increment_slot_orders', {
-        slot_id: slotId,
-      })
+      const tableName = isEventSlot ? 'event_pickup_slots' : 'pickup_slots'
+      
+      // Get current slot data
+      const { data: slot, error: fetchError } = await supabase
+        .from(tableName)
+        .select('current_orders, max_orders')
+        .eq('id', slotId)
+        .single()
+
+      if (fetchError) {
+        return { data: null, error: fetchError.message }
+      }
+
+      if (slot.current_orders >= slot.max_orders) {
+        return { data: null, error: 'שעת האיסוף מלאה' }
+      }
+
+      const { error } = await supabase
+        .from(tableName)
+        .update({ current_orders: (slot.current_orders ?? 0) + 1 })
+        .eq('id', slotId)
 
       if (error) {
-        // Fallback to manual increment
-        const { data: slot } = await supabase
-          .from('pickup_slots')
-          .select('current_orders')
-          .eq('id', slotId)
-          .single()
-
-        if (slot) {
-          await supabase
-            .from('pickup_slots')
-            .update({ current_orders: (slot.current_orders ?? 0) + 1 })
-            .eq('id', slotId)
-        }
+        return { data: null, error: error.message }
       }
 
       return { data: true, error: null }

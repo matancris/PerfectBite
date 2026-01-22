@@ -34,6 +34,7 @@ export interface MenuItem {
   price: number
   imageUrl?: string
   isActive: boolean
+  availableAnytime: boolean // Can be ordered from regular menu without event
   maxQuantity?: number
   createdAt: string
 }
@@ -44,9 +45,22 @@ export interface Event {
   title: string
   description?: string
   eventDate: string
+  startTime: string
+  endTime: string
   orderDeadline: string
   isActive: boolean
+  allowAnyPickupTime: boolean // When true, customers can pick up anytime during event hours
   createdAt: string
+  pickupSlots?: EventPickupSlot[]
+  items?: EventItem[]
+}
+
+export interface EventPickupSlot {
+  id: string
+  eventId: string
+  time: string
+  maxOrders: number
+  currentOrders: number
 }
 
 export interface EventItem {
@@ -55,6 +69,7 @@ export interface EventItem {
   menuItemId: string
   customPrice?: number
   maxQuantity?: number
+  currentQuantity: number
   menuItem?: MenuItem
 }
 
@@ -136,7 +151,8 @@ export interface OrderFormData {
   customerPhone: string
   customerEmail?: string
   fulfillmentType: FulfillmentType
-  pickupSlotId: string
+  pickupSlotId?: string // Optional when event allows any pickup time
+  flexiblePickupConfirmed?: boolean // True when customer confirms flexible pickup
   notes?: string
 }
 

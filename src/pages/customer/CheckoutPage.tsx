@@ -1,14 +1,44 @@
+import { useEffect, useState } from 'react'
 import { OrderForm } from '@/components/customer/OrderForm'
 import { OrderSummary } from '@/components/customer/OrderSummary'
 import { useCartStore } from '@/stores/cart.store'
 import { Link } from 'react-router-dom'
 import { AppButton, Icon } from '@/components/ui'
 import { useDocumentTitle } from '@/hooks'
+import { eventService } from '@/services/event.service'
+
+interface StockLimit {
+  menuItemId: string
+  maxQuantity: number
+}
 
 export function CheckoutPage() {
   useDocumentTitle('סיום הזמנה')
   const items = useCartStore((state) => state.items)
   const totalPrice = useCartStore((state) => state.getTotalPrice())
+  const eventId = useCartStore((state) => state.eventId)
+  const [stockLimits, setStockLimits] = useState<StockLimit[]>([])
+
+  // Fetch stock limits for event items
+  useEffect(() => {
+    async function fetchStockLimits() {
+      if (!eventId) {
+        setStockLimits([])
+        return
+      }
+
+      const result = await eventService.getEventMenuItems(eventId)
+      if (result.data) {
+        setStockLimits(
+          result.data.map((item) => ({
+            menuItemId: item.id,
+            maxQuantity: item.remainingQuantity,
+          }))
+        )
+      }
+    }
+    fetchStockLimits()
+  }, [eventId])
 
   if (items.length === 0) {
     return (
@@ -36,7 +66,7 @@ export function CheckoutPage() {
           <OrderForm />
         </div>
         <div className="checkout-page__summary">
-          <OrderSummary items={items} total={totalPrice} />
+          <OrderSummary items={items} total={totalPrice} stockLimits={stockLimits} />
         </div>
       </div>
     </div>

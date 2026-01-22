@@ -87,6 +87,7 @@ export const menuService = {
           price: item.price,
           image_url: item.imageUrl,
           is_active: item.isActive,
+          available_anytime: item.availableAnytime,
           max_quantity: item.maxQuantity,
         })
         .select()
@@ -116,6 +117,7 @@ export const menuService = {
           image_url: updates.imageUrl,
           category_id: updates.categoryId,
           is_active: updates.isActive,
+          available_anytime: updates.availableAnytime,
           max_quantity: updates.maxQuantity,
         })
         .eq('id', id)

@@ -40,6 +40,79 @@
   }
 }
 
+// Events Section (Home Page)
+.events-section {
+  &__title {
+    @include flex-center;
+    gap: $spacing-sm;
+    font-size: $font-size-xl;
+    font-weight: 600;
+    margin-bottom: $spacing-lg;
+    
+    .material-symbols-outlined {
+      color: $primary;
+    }
+  }
+  
+  &__grid {
+    @include grid(2, $spacing-lg);
+    
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.event-card {
+  padding: $spacing-lg;
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__icon {
+    color: $primary;
+  }
+  
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  &__description {
+    color: $text-secondary;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__detail {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    
+    &--deadline {
+      color: $warning;
+      font-weight: 500;
+    }
+  }
+  
+  &__action {
+    display: block;
+  }
+}
+
 .features {
   &__container {
     @include grid(3, $spacing-lg);
@@ -82,15 +155,71 @@
     margin-bottom: $spacing-sm;
   }
   
+  &__description {
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+  
   &__subtitle {
     color: $text-secondary;
   }
   
-  &__loading {
+  &__event-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__deadline {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+  }
+  
+  &__deadline-passed {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    color: $danger;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    background: rgba($danger, 0.1);
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-full;
+  }
+  
+  &__back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    color: $primary;
+    font-size: $font-size-sm;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  &__loading,
+  &__empty {
     @include flex-center;
     flex-direction: column;
     gap: $spacing-md;
     padding: $spacing-xxl;
+    text-align: center;
+    
+    h2 {
+      @include heading-3;
+    }
+    
+    p {
+      color: $text-secondary;
+      margin-bottom: $spacing-md;
+    }
   }
 }
 
@@ -265,6 +394,44 @@
   }
   
   &__no-slots {
+    font-size: $font-size-sm;
+    color: $danger;
+    margin-top: $spacing-xs;
+  }
+  
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    background: $surface-light;
+    border-radius: $radius-md;
+    cursor: pointer;
+    border: 2px solid $border-color;
+    transition: all $transition-fast;
+    
+    &:hover {
+      border-color: $primary-light;
+    }
+    
+    &:has(input:checked) {
+      border-color: $primary;
+      background: rgba($primary, 0.05);
+    }
+    
+    input {
+      width: 20px;
+      height: 20px;
+      accent-color: $primary;
+    }
+    
+    span {
+      font-weight: 500;
+      color: $text-primary;
+    }
+  }
+  
+  &__error {
     font-size: $font-size-sm;
     color: $danger;
     margin-top: $spacing-xs;
@@ -561,11 +728,22 @@
     cursor: pointer;
     transition: all $transition-fast;
     
-    &:hover {
+    &:hover:not(:disabled) {
       background: $primary-light;
       color: $white;
       border-color: $primary-light;
     }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  &__stock-info {
+    font-size: $font-size-xs;
+    color: $warning;
+    font-weight: 500;
   }
   
   &__remove-btn {

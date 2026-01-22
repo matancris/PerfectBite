@@ -8,19 +8,33 @@ import { useCartStore } from '@/stores/cart.store'
 import { useToast } from '@/hooks/useToast'
 import { orderService } from '@/services/order.service'
 import { pickupSlotsService } from '@/services/pickupSlots.service'
+import { eventService } from '@/services/event.service'
 import { PaymentForm } from './PaymentForm'
-import type { OrderFormData, Order, PickupSlot } from '@/types'
+import type { OrderFormData, Order, PickupSlot, Event } from '@/types'
 
-const orderSchema = z.object({
+// Schema for events with specific pickup slots
+const orderSchemaWithSlots = z.object({
   customerName: z.string().min(2, 'שם חייב להכיל לפחות 2 תווים'),
   customerPhone: z.string().min(9, 'מספר טלפון לא תקין'),
   customerEmail: z.email('כתובת אימייל לא תקינה').optional().or(z.literal('')),
   fulfillmentType: z.enum(['pickup', 'dine_in']),
   pickupSlotId: z.string().min(1, 'יש לבחור שעת איסוף'),
+  flexiblePickupConfirmed: z.boolean().optional(),
   notes: z.string().optional(),
 })
 
-type FormData = z.infer<typeof orderSchema>
+// Schema for events with flexible pickup (no slots required)
+const orderSchemaFlexible = z.object({
+  customerName: z.string().min(2, 'שם חייב להכיל לפחות 2 תווים'),
+  customerPhone: z.string().min(9, 'מספר טלפון לא תקין'),
+  customerEmail: z.email('כתובת אימייל לא תקינה').optional().or(z.literal('')),
+  fulfillmentType: z.enum(['pickup', 'dine_in']),
+  pickupSlotId: z.string().optional(),
+  flexiblePickupConfirmed: z.boolean().refine(val => val === true, 'יש לאשר את שעות האיסוף'),
+  notes: z.string().optional(),
+})
+
+type FormData = z.infer<typeof orderSchemaWithSlots>
 
 type CheckoutStep = 'details' | 'payment'
 
@@ -36,26 +50,53 @@ export function OrderForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [step, setStep] = useState<CheckoutStep>('details')
   const [pendingOrder, setPendingOrder] = useState<Order | null>(null)
+  const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
+
+  // Determine if event allows flexible pickup
+  const allowsFlexiblePickup = currentEvent?.allowAnyPickupTime ?? false
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(orderSchema),
+    resolver: zodResolver(allowsFlexiblePickup ? orderSchemaFlexible : orderSchemaWithSlots) as never,
     defaultValues: {
       fulfillmentType: 'pickup',
+      flexiblePickupConfirmed: false,
     },
   })
 
   useEffect(() => {
-    async function fetchPickupSlots() {
+    async function fetchEventAndSlots() {
+      // Fetch event data if ordering from an event
+      if (eventId) {
+        const eventResult = await eventService.getEvent(eventId)
+        if (eventResult.data) {
+          setCurrentEvent(eventResult.data)
+          
+          // Only fetch pickup slots if event doesn't allow any pickup time
+          if (!eventResult.data.allowAnyPickupTime) {
+            const result = await pickupSlotsService.getAvailableSlots(eventId)
+            if (result.data) {
+              setPickupSlots(result.data)
+            }
+          }
+          return
+        }
+      }
+      
+      // Fetch general pickup slots (non-event orders)
+      console.log('[OrderForm] Fetching pickup slots for eventId:', eventId)
       const result = await pickupSlotsService.getAvailableSlots(eventId ?? undefined)
+      console.log('[OrderForm] Pickup slots result:', result)
       if (result.data) {
         setPickupSlots(result.data)
+      } else if (result.error) {
+        console.error('[OrderForm] Error fetching pickup slots:', result.error)
       }
     }
-    fetchPickupSlots()
+    fetchEventAndSlots()
   }, [eventId])
 
   const onSubmit = async (data: FormData) => {
@@ -66,7 +107,8 @@ export function OrderForm() {
       customerPhone: data.customerPhone,
       customerEmail: data.customerEmail || undefined,
       fulfillmentType: data.fulfillmentType,
-      pickupSlotId: data.pickupSlotId,
+      pickupSlotId: allowsFlexiblePickup ? undefined : data.pickupSlotId,
+      flexiblePickupConfirmed: data.flexiblePickupConfirmed,
       notes: data.notes,
     }
 
@@ -185,21 +227,37 @@ export function OrderForm() {
         </div>
 
         <div className="order-form__field">
-          <AppSelect
-            label="שעת איסוף"
-            placeholder={pickupSlots.length === 0 ? 'אין שעות זמינות' : 'בחרו שעה'}
-            options={pickupSlots.map((slot) => ({
-              value: slot.id,
-              label: `${slot.time}${slot.maxOrders ? ` (נותרו ${slot.maxOrders - slot.currentOrders} מקומות)` : ''}`,
-            }))}
-            {...register('pickupSlotId')}
-            error={errors.pickupSlotId?.message}
-            disabled={pickupSlots.length === 0}
-          />
-          {pickupSlots.length === 0 && (
-            <p className="order-form__no-slots">
-              אין שעות איסוף זמינות כרגע. אנא נסו שוב מאוחר יותר.
-            </p>
+          {allowsFlexiblePickup ? (
+            <>
+              <label className="order-form__checkbox">
+                <input type="checkbox" {...register('flexiblePickupConfirmed')} />
+                <span>
+                  אגיע בשעות האירוע {currentEvent?.startTime} - {currentEvent?.endTime}
+                </span>
+              </label>
+              {errors.flexiblePickupConfirmed && (
+                <p className="order-form__error">{errors.flexiblePickupConfirmed.message}</p>
+              )}
+            </>
+          ) : (
+            <>
+              <AppSelect
+                label="שעת איסוף"
+                placeholder={pickupSlots.length === 0 ? 'אין שעות זמינות' : 'בחרו שעה'}
+                options={pickupSlots.map((slot) => ({
+                  value: slot.id,
+                  label: `${slot.time}${slot.maxOrders ? ` (נותרו ${slot.maxOrders - slot.currentOrders} מקומות)` : ''}`,
+                }))}
+                {...register('pickupSlotId')}
+                error={errors.pickupSlotId?.message}
+                disabled={pickupSlots.length === 0}
+              />
+              {pickupSlots.length === 0 && (
+                <p className="order-form__no-slots">
+                  אין שעות איסוף זמינות כרגע. אנא נסו שוב מאוחר יותר.
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

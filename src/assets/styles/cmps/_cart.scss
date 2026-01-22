@@ -125,6 +125,13 @@
     color: $text-secondary;
   }
   
+  &__stock-limit {
+    font-size: $font-size-xs;
+    color: $warning;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  
   &__quantity {
     display: flex;
     align-items: center;
@@ -139,11 +146,18 @@
     background: $white;
     border: 1px solid $border-color;
     font-size: 16px;
+    cursor: pointer;
+    transition: all $transition-fast;
     
-    &:hover {
+    &:hover:not(:disabled) {
       background: $primary-light;
       color: $white;
       border-color: $primary-light;
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
   

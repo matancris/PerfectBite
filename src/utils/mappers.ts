@@ -5,6 +5,7 @@ import type {
   Order,
   OrderItem,
   PickupSlot,
+  EventPickupSlot,
   Payment,
 } from '@/types'
 
@@ -18,6 +19,7 @@ interface MenuItemRow {
   price: number
   image_url: string | null
   is_active: boolean
+  available_anytime: boolean
   max_quantity: number | null
   created_at: string
 }
@@ -37,8 +39,11 @@ interface EventRow {
   title: string
   description: string | null
   event_date: string
+  start_time: string
+  end_time: string
   order_deadline: string
   is_active: boolean
+  allow_any_pickup_time: boolean | null
   created_at: string
 }
 
@@ -101,6 +106,7 @@ export function mapMenuItem(row: MenuItemRow): MenuItem {
     price: row.price,
     imageUrl: row.image_url ?? undefined,
     isActive: row.is_active,
+    availableAnytime: row.available_anytime ?? false,
     maxQuantity: row.max_quantity ?? undefined,
     createdAt: row.created_at,
   }
@@ -124,8 +130,11 @@ export function mapEvent(row: EventRow): Event {
     title: row.title,
     description: row.description ?? undefined,
     eventDate: row.event_date,
+    startTime: row.start_time,
+    endTime: row.end_time,
     orderDeadline: row.order_deadline,
     isActive: row.is_active,
+    allowAnyPickupTime: row.allow_any_pickup_time ?? false,
     createdAt: row.created_at,
   }
 }
@@ -149,6 +158,24 @@ export function mapPickupSlot(row: PickupSlotRow): PickupSlot {
     eventId: row.event_id ?? undefined,
     time: row.time,
     maxOrders: row.max_orders ?? undefined,
+    currentOrders: row.current_orders,
+  }
+}
+
+interface EventPickupSlotRow {
+  id: string
+  event_id: string
+  time: string
+  max_orders: number
+  current_orders: number
+}
+
+export function mapEventPickupSlot(row: EventPickupSlotRow): EventPickupSlot {
+  return {
+    id: row.id,
+    eventId: row.event_id,
+    time: row.time,
+    maxOrders: row.max_orders,
     currentOrders: row.current_orders,
   }
 }
