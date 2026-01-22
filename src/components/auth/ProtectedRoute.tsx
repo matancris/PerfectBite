@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuthStore } from '@/stores/auth.store'
 
@@ -7,14 +7,13 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, isLoading, checkSession } = useAuthStore()
+  const user = useAuthStore((state) => state.user)
+  const isLoading = useAuthStore((state) => state.isLoading)
+  const isInitialized = useAuthStore((state) => state.isInitialized)
   const location = useLocation()
 
-  useEffect(() => {
-    checkSession()
-  }, [checkSession])
-
-  if (isLoading) {
+  // Show loading while auth is initializing
+  if (!isInitialized || isLoading) {
     return (
       <div className="loading-screen">
         <div className="loading-screen__spinner" />

@@ -87,13 +87,9 @@ export function OrderForm() {
       }
       
       // Fetch general pickup slots (non-event orders)
-      console.log('[OrderForm] Fetching pickup slots for eventId:', eventId)
       const result = await pickupSlotsService.getAvailableSlots(eventId ?? undefined)
-      console.log('[OrderForm] Pickup slots result:', result)
       if (result.data) {
         setPickupSlots(result.data)
-      } else if (result.error) {
-        console.error('[OrderForm] Error fetching pickup slots:', result.error)
       }
     }
     fetchEventAndSlots()

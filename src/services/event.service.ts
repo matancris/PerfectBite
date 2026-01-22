@@ -1,8 +1,6 @@
-import { supabase } from '@/lib/supabase'
+import { supabase, BUSINESS_ID } from '@/lib/supabase'
 import type { Event, EventItem, EventPickupSlot, MenuItem, ApiResponse } from '@/types'
 import { mapEvent, mapMenuItem, mapEventPickupSlot } from '@/utils/mappers'
-
-const BUSINESS_ID = import.meta.env.VITE_BUSINESS_ID
 
 export const eventService = {
   async getEvents(): Promise<ApiResponse<Event[]>> {
@@ -10,6 +8,7 @@ export const eventService = {
       const { data, error } = await supabase
         .from('events')
         .select('*')
+        .eq('business_id', BUSINESS_ID)
         .order('event_date', { ascending: false })
 
       if (error) {

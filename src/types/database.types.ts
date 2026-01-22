@@ -1,5 +1,6 @@
 // Supabase database types - will be auto-generated in production
-// For now, this is a placeholder that matches our schema
+// Run: npx supabase gen types typescript --project-id YOUR_PROJECT_ID > src/types/database.types.ts
+// For now, this is manually maintained to match our schema
 
 export interface Database {
   public: {
@@ -39,6 +40,7 @@ export interface Database {
           price: number
           image_url: string | null
           is_active: boolean
+          available_anytime: boolean
           max_quantity: number | null
           created_at: string
         }
@@ -52,8 +54,11 @@ export interface Database {
           title: string
           description: string | null
           event_date: string
+          start_time: string
+          end_time: string
           order_deadline: string
           is_active: boolean
+          allow_any_pickup_time: boolean
           created_at: string
         }
         Insert: Omit<Database['public']['Tables']['events']['Row'], 'id' | 'created_at'>
@@ -66,9 +71,22 @@ export interface Database {
           menu_item_id: string
           custom_price: number | null
           max_quantity: number | null
+          current_quantity: number
         }
         Insert: Omit<Database['public']['Tables']['event_items']['Row'], 'id'>
         Update: Partial<Database['public']['Tables']['event_items']['Insert']>
+      }
+      event_pickup_slots: {
+        Row: {
+          id: string
+          event_id: string
+          time: string
+          max_orders: number
+          current_orders: number
+          created_at: string
+        }
+        Insert: Omit<Database['public']['Tables']['event_pickup_slots']['Row'], 'id' | 'created_at' | 'current_orders'>
+        Update: Partial<Database['public']['Tables']['event_pickup_slots']['Insert']>
       }
       pickup_slots: {
         Row: {
@@ -130,7 +148,23 @@ export interface Database {
       }
     }
     Views: Record<string, never>
-    Functions: Record<string, never>
+    Functions: {
+      create_order_atomic: {
+        Args: {
+          p_business_id: string
+          p_event_id: string | null
+          p_customer_name: string
+          p_customer_phone: string
+          p_customer_email: string | null
+          p_fulfillment_type: string
+          p_pickup_slot_id: string | null
+          p_notes: string | null
+          p_total_amount: number
+          p_items: unknown[]
+        }
+        Returns: string
+      }
+    }
     Enums: Record<string, never>
   }
 }

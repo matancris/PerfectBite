@@ -1,7 +1,5 @@
-import { supabase } from '@/lib/supabase'
+import { supabase, BUSINESS_ID } from '@/lib/supabase'
 import type { PickupSlot, ApiResponse } from '@/types'
-
-const BUSINESS_ID = import.meta.env.VITE_BUSINESS_ID
 
 export const pickupSlotsService = {
   async getPickupSlots(): Promise<ApiResponse<PickupSlot[]>> {
@@ -36,17 +34,13 @@ export const pickupSlotsService = {
     try {
       // If event ID is provided, fetch from event_pickup_slots table
       if (eventId) {
-        console.log('[PickupSlotsService] Fetching event pickup slots for eventId:', eventId)
         const { data, error } = await supabase
           .from('event_pickup_slots')
           .select('*')
           .eq('event_id', eventId)
           .order('time')
 
-        console.log('[PickupSlotsService] Raw event pickup slots:', { data, error })
-
         if (error) {
-          console.error('[PickupSlotsService] Error:', error.message)
           return { data: null, error: error.message }
         }
 
@@ -62,7 +56,6 @@ export const pickupSlotsService = {
             currentOrders: slot.current_orders ?? 0,
           }))
 
-        console.log('[PickupSlotsService] Available slots:', availableSlots)
         return { data: availableSlots, error: null }
       }
 

@@ -83,6 +83,8 @@ export function EventDialog({ event, onClose }: EventDialogProps) {
   })
 
   const allowAnyPickupTime = watch('allowAnyPickupTime')
+  const watchedStartTime = watch('startTime')
+  const watchedEndTime = watch('endTime')
 
   // Load menu items and existing event data
   useEffect(() => {
@@ -448,10 +450,8 @@ export function EventDialog({ event, onClose }: EventDialogProps) {
                     variant="secondary"
                     size="sm"
                     onClick={() => {
-                      const startTime = (document.querySelector('input[name="startTime"]') as HTMLInputElement)?.value
-                      const endTime = (document.querySelector('input[name="endTime"]') as HTMLInputElement)?.value
-                      if (startTime && endTime) {
-                        generatePickupSlots(startTime, endTime)
+                      if (watchedStartTime && watchedEndTime) {
+                        generatePickupSlots(watchedStartTime, watchedEndTime)
                       }
                     }}
                   >

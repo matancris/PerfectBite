@@ -62,7 +62,6 @@ export function MenuPage() {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible' && eventId) {
-        console.log('[MenuPage] Page became visible, refreshing event data...')
         loadEventData(eventId)
       }
     }
@@ -75,7 +74,6 @@ export function MenuPage() {
   useEffect(() => {
     const handleFocus = () => {
       if (eventId) {
-        console.log('[MenuPage] Window focused, refreshing event data...')
         loadEventData(eventId)
       }
     }

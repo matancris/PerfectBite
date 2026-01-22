@@ -12,6 +12,7 @@ import { AdminEventsPage } from '@/pages/admin/EventsPage'
 import { AdminPickupSlotsPage } from '@/pages/admin/PickupSlotsPage'
 import { AdminSettingsPage } from '@/pages/admin/SettingsPage'
 import { LoginPage } from '@/pages/auth/LoginPage'
+import { NotFoundPage } from '@/pages/NotFoundPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
 
 export function AppRouter() {
@@ -44,6 +45,9 @@ export function AppRouter() {
         <Route path="pickup-slots" element={<AdminPickupSlotsPage />} />
         <Route path="settings" element={<AdminSettingsPage />} />
       </Route>
+
+      {/* 404 Not Found - must be last */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

@@ -119,6 +119,99 @@ src/
 - `npm run test:ui` - Run tests with UI
 - `npm run lint` - Run ESLint
 
+## Production Deployment
+
+### Supabase Backend
+
+Your Supabase project is already configured and production-ready:
+
+- **Project URL**: `https://uzwbucaysfoefigdcfsk.supabase.co`
+- **Region**: ap-south-1
+- **Database**: PostgreSQL 17.6
+- **Status**: ACTIVE_HEALTHY
+
+**Database Tables:**
+- `businesses` - Business configuration
+- `menu_categories` - Menu categories
+- `menu_items` - Menu items with pricing
+- `events` - Special events/sales
+- `event_items` - Items available in events
+- `event_pickup_slots` - Event-specific pickup times
+- `pickup_slots` - General pickup time slots
+- `orders` - Customer orders
+- `order_items` - Items in orders
+- `payments` - Payment records
+
+**Security:**
+- Row Level Security (RLS) enabled on all tables
+- Public read access for menu items, events, and pickup slots
+- Anonymous order creation allowed
+- Authenticated access required for admin operations
+
+**Storage:**
+- `business-assets` bucket configured for logos and images
+- Public read access, authenticated write access
+
+### Frontend Hosting Options
+
+#### Option 1: Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) and import your repository
+3. Configure environment variables:
+   ```
+   VITE_SUPABASE_URL=https://uzwbucaysfoefigdcfsk.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key
+   VITE_BUSINESS_ID=your-business-uuid
+   ```
+4. Deploy - Vercel auto-detects Vite and configures the build
+
+#### Option 2: Netlify
+
+1. Push your code to GitHub
+2. Go to [netlify.com](https://netlify.com) and import your repository
+3. Build settings:
+   - **Build command**: `npm run build`
+   - **Publish directory**: `dist`
+4. Configure environment variables in Site settings
+5. Add `_redirects` file in `public/` for SPA routing:
+   ```
+   /*    /index.html   200
+   ```
+
+#### Option 3: Manual Deployment
+
+1. Build the project:
+   ```bash
+   npm run build
+   ```
+
+2. Deploy the `dist/` folder to any static hosting:
+   - AWS S3 + CloudFront
+   - Google Cloud Storage
+   - Azure Static Web Apps
+   - DigitalOcean App Platform
+
+### Environment Variables
+
+For production, set these environment variables:
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_SUPABASE_URL` | Supabase project URL |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anon/public key |
+| `VITE_BUSINESS_ID` | Your business UUID from the businesses table |
+| `VITE_PAYMENT_PROVIDER` | Payment provider (`mock`, `stripe`, etc.) |
+
+### Post-Deployment Checklist
+
+- [ ] Environment variables configured on hosting platform
+- [ ] Custom domain configured (optional)
+- [ ] SSL certificate active (auto-enabled on Vercel/Netlify)
+- [ ] Create admin user in Supabase Auth
+- [ ] Test order flow end-to-end
+- [ ] Configure payment provider for production (replace mock)
+
 ## Payment Integration
 
 The app uses a provider-agnostic payment architecture. To add a new payment provider:

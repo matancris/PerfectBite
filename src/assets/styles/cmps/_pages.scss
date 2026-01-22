@@ -841,6 +841,120 @@
   }
 }
 
+// Not Found Page (404)
+.not-found-page {
+  @include flex-center;
+  min-height: 60vh;
+  
+  &__content {
+    @include card;
+    padding: $spacing-xxl;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+  }
+  
+  &__icon {
+    font-size: 64px;
+    color: $text-tertiary;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__title {
+    @include heading-1;
+    color: $primary;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__subtitle {
+    @include heading-2;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__message {
+    color: $text-secondary;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+  }
+}
+
+// Error Boundary
+.error-boundary {
+  @include flex-center;
+  min-height: 100vh;
+  padding: $spacing-md;
+  background: $surface-dark;
+  
+  &__content {
+    @include card;
+    padding: $spacing-xxl;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+  }
+  
+  &__icon {
+    font-size: 64px;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__title {
+    @include heading-2;
+    color: $danger;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__message {
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__details {
+    background: $surface-dark;
+    color: $danger;
+    padding: $spacing-md;
+    border-radius: $radius-md;
+    font-family: monospace;
+    font-size: $font-size-sm;
+    text-align: left;
+    overflow-x: auto;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: $spacing-lg;
+    direction: ltr;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+  }
+}
+
+// Loading Screen
+.loading-screen {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  min-height: 50vh;
+  
+  &__spinner {
+    @include spinner(24px, $primary);
+  }
+  
+  p {
+    color: $text-secondary;
+  }
+}
+
 // Login Page
 .login-page {
   @include flex-center;

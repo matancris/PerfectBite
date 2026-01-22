@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { supabase, BUSINESS_ID } from '@/lib/supabase'
 import type { Order, OrderStatus, OrderFormData, CartItem, ApiResponse } from '@/types'
 import { mapOrder } from '@/utils/mappers'
 import { pickupSlotsService } from './pickupSlots.service'
@@ -48,10 +48,79 @@ export const orderService = {
     }
   },
 
+  /**
+   * Create an order atomically using database function
+   * This prevents race conditions for pickup slots and event item quantities
+   */
   async createOrder(
     formData: OrderFormData,
     items: CartItem[],
     eventId?: string | null
+  ): Promise<ApiResponse<Order>> {
+    try {
+      const totalAmount = items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      )
+
+      // Prepare items for the database function
+      const orderItems = items.map((item) => ({
+        menu_item_id: item.menuItemId,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        notes: item.notes || null,
+      }))
+
+      // Try to use atomic function first (if migration is applied)
+      const { data: orderId, error: rpcError } = await supabase
+        .rpc('create_order_atomic', {
+          p_business_id: BUSINESS_ID,
+          p_event_id: eventId || null,
+          p_customer_name: formData.customerName,
+          p_customer_phone: formData.customerPhone,
+          p_customer_email: formData.customerEmail || null,
+          p_fulfillment_type: formData.fulfillmentType,
+          p_pickup_slot_id: formData.pickupSlotId || null,
+          p_notes: formData.notes || null,
+          p_total_amount: totalAmount,
+          p_items: orderItems,
+        })
+
+      if (rpcError) {
+        // Check if it's a "function not found" error - fallback to legacy method
+        if (rpcError.message.includes('function') && rpcError.message.includes('does not exist')) {
+          return this.createOrderLegacy(formData, items, eventId, totalAmount)
+        }
+
+        // Handle specific error codes from the function
+        if (rpcError.code === 'P0001') {
+          return { data: null, error: 'שעת האיסוף שנבחרה מלאה. אנא בחרו שעה אחרת.' }
+        }
+        if (rpcError.code === 'P0002') {
+          return { data: null, error: rpcError.message }
+        }
+
+        return { data: null, error: rpcError.message }
+      }
+
+      // Fetch the complete order with relations
+      return this.getOrder(orderId as string)
+    } catch (error) {
+      return { data: null, error: (error as Error).message }
+    }
+  },
+
+  /**
+   * Legacy order creation (fallback when atomic function is not available)
+   * Note: This method has race condition vulnerabilities
+   * @deprecated Use create_order_atomic database function instead
+   */
+  async createOrderLegacy(
+    formData: OrderFormData,
+    items: CartItem[],
+    eventId: string | null | undefined,
+    totalAmount: number
   ): Promise<ApiResponse<Order>> {
     try {
       // VALIDATION 1: Check pickup slot availability
@@ -90,16 +159,11 @@ export const orderService = {
         }
       }
 
-      const totalAmount = items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      )
-
       // Create order
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
-          business_id: import.meta.env.VITE_BUSINESS_ID || 'default',
+          business_id: BUSINESS_ID,
           event_id: eventId,
           customer_name: formData.customerName,
           customer_phone: formData.customerPhone,
