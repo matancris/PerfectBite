@@ -596,3 +596,222 @@
     justify-content: flex-end;
   }
 }
+
+// Pickup Slots Page
+.pickup-slots-page {
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__title {
+    @include heading-2;
+  }
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+    
+    @include md {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__section-title {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__section-desc {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: $spacing-md;
+    
+    label {
+      font-size: $font-size-sm;
+      font-weight: 500;
+      color: $text-secondary;
+      margin-bottom: $spacing-xs;
+    }
+  }
+  
+  &__warning {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-sm;
+    color: $warning;
+    margin-top: $spacing-md;
+    
+    .material-symbols-rounded {
+      font-size: 18px;
+    }
+  }
+  
+  &__loading,
+  &__empty {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+    color: $text-secondary;
+    text-align: center;
+    
+    span {
+      font-size: $font-size-sm;
+      opacity: 0.7;
+    }
+  }
+  
+  &__slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: $spacing-md;
+  }
+  
+  &__modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba($black, 0.5);
+    @include flex-center;
+    z-index: $z-modal;
+  }
+  
+  &__modal {
+    @include card;
+    padding: $spacing-lg;
+    width: 100%;
+    max-width: 400px;
+    
+    h3 {
+      font-size: $font-size-lg;
+      font-weight: 600;
+      margin-bottom: $spacing-lg;
+    }
+  }
+  
+  &__modal-actions {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: flex-end;
+    margin-top: $spacing-lg;
+  }
+}
+
+.pickup-slot-card {
+  @include card;
+  padding: $spacing-md;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  
+  &--full {
+    opacity: 0.7;
+    background: $surface-light;
+  }
+  
+  &__time {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: $primary;
+  }
+  
+  &__stats {
+    display: flex;
+    align-items: baseline;
+    gap: $spacing-xs;
+  }
+  
+  &__count {
+    display: flex;
+    align-items: baseline;
+  }
+  
+  &__current {
+    font-size: $font-size-xl;
+    font-weight: 700;
+  }
+  
+  &__separator {
+    margin: 0 2px;
+    color: $text-tertiary;
+  }
+  
+  &__max {
+    color: $text-secondary;
+  }
+  
+  &__label {
+    font-size: $font-size-xs;
+    color: $text-tertiary;
+  }
+  
+  &__progress {
+    height: 4px;
+    background: $surface-light;
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+  
+  &__progress-bar {
+    height: 100%;
+    background: $primary;
+    border-radius: $radius-full;
+    transition: width $transition-normal;
+    
+    .pickup-slot-card--full & {
+      background: $danger;
+    }
+  }
+  
+  &__badge {
+    position: absolute;
+    top: $spacing-sm;
+    left: $spacing-sm;
+    background: $danger;
+    color: $white;
+    padding: 2px $spacing-sm;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: 600;
+  }
+  
+  &__delete {
+    position: absolute;
+    top: $spacing-sm;
+    right: $spacing-sm;
+    color: $text-tertiary;
+    opacity: 0;
+    transition: opacity $transition-fast;
+    
+    .pickup-slot-card:hover & {
+      opacity: 1;
+    }
+    
+    &:hover {
+      color: $danger;
+    }
+  }
+}

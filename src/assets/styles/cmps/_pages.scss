@@ -263,6 +263,12 @@
   &__field {
     margin-bottom: $spacing-md;
   }
+  
+  &__no-slots {
+    font-size: $font-size-sm;
+    color: $danger;
+    margin-top: $spacing-xs;
+  }
 }
 
 // Payment Form

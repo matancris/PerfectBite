@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import type { Order, OrderStatus, OrderFormData, CartItem, ApiResponse } from '@/types'
 import { mapOrder } from '@/utils/mappers'
+import { pickupSlotsService } from './pickupSlots.service'
 
 export const orderService = {
   async getOrders(): Promise<ApiResponse<Order[]>> {
@@ -99,6 +100,11 @@ export const orderService = {
         // Rollback order if items failed
         await supabase.from('orders').delete().eq('id', order.id)
         return { data: null, error: itemsError.message }
+      }
+
+      // Increment pickup slot order count
+      if (formData.pickupSlotId) {
+        await pickupSlotsService.incrementSlotOrders(formData.pickupSlotId)
       }
 
       // Fetch complete order

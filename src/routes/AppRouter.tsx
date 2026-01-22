@@ -9,6 +9,7 @@ import { AdminDashboardPage } from '@/pages/admin/DashboardPage'
 import { AdminOrdersPage } from '@/pages/admin/OrdersPage'
 import { AdminMenuPage } from '@/pages/admin/MenuPage'
 import { AdminEventsPage } from '@/pages/admin/EventsPage'
+import { AdminPickupSlotsPage } from '@/pages/admin/PickupSlotsPage'
 import { AdminSettingsPage } from '@/pages/admin/SettingsPage'
 import { LoginPage } from '@/pages/auth/LoginPage'
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
@@ -40,6 +41,7 @@ export function AppRouter() {
         <Route path="orders" element={<AdminOrdersPage />} />
         <Route path="menu" element={<AdminMenuPage />} />
         <Route path="events" element={<AdminEventsPage />} />
+        <Route path="pickup-slots" element={<AdminPickupSlotsPage />} />
         <Route path="settings" element={<AdminSettingsPage />} />
       </Route>
     </Routes>

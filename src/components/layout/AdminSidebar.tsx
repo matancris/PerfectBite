@@ -7,6 +7,7 @@ const navItems = [
   { path: '/admin/orders', label: 'הזמנות', icon: 'receipt_long' },
   { path: '/admin/menu', label: 'תפריט', icon: 'restaurant_menu' },
   { path: '/admin/events', label: 'אירועים', icon: 'event' },
+  { path: '/admin/pickup-slots', label: 'שעות איסוף', icon: 'schedule' },
   { path: '/admin/settings', label: 'הגדרות', icon: 'settings' },
 ]
 

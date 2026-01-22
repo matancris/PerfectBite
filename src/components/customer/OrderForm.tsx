@@ -7,8 +7,9 @@ import { AppButton, AppInput, AppSelect, AppTextarea } from '@/components/ui'
 import { useCartStore } from '@/stores/cart.store'
 import { useToast } from '@/hooks/useToast'
 import { orderService } from '@/services/order.service'
+import { pickupSlotsService } from '@/services/pickupSlots.service'
 import { PaymentForm } from './PaymentForm'
-import type { OrderFormData, Order } from '@/types'
+import type { OrderFormData, Order, PickupSlot } from '@/types'
 
 const orderSchema = z.object({
   customerName: z.string().min(2, 'שם חייב להכיל לפחות 2 תווים'),
@@ -31,7 +32,7 @@ export function OrderForm() {
   const eventId = useCartStore((state) => state.eventId)
   const clearCart = useCartStore((state) => state.clearCart)
   
-  const [pickupSlots, setPickupSlots] = useState<{ id: string; time: string }[]>([])
+  const [pickupSlots, setPickupSlots] = useState<PickupSlot[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [step, setStep] = useState<CheckoutStep>('details')
   const [pendingOrder, setPendingOrder] = useState<Order | null>(null)
@@ -49,7 +50,7 @@ export function OrderForm() {
 
   useEffect(() => {
     async function fetchPickupSlots() {
-      const result = await orderService.getPickupSlots(eventId ?? undefined)
+      const result = await pickupSlotsService.getAvailableSlots(eventId ?? undefined)
       if (result.data) {
         setPickupSlots(result.data)
       }
@@ -186,14 +187,20 @@ export function OrderForm() {
         <div className="order-form__field">
           <AppSelect
             label="שעת איסוף"
-            placeholder="בחרו שעה"
+            placeholder={pickupSlots.length === 0 ? 'אין שעות זמינות' : 'בחרו שעה'}
             options={pickupSlots.map((slot) => ({
               value: slot.id,
-              label: slot.time,
+              label: `${slot.time}${slot.maxOrders ? ` (נותרו ${slot.maxOrders - slot.currentOrders} מקומות)` : ''}`,
             }))}
             {...register('pickupSlotId')}
             error={errors.pickupSlotId?.message}
+            disabled={pickupSlots.length === 0}
           />
+          {pickupSlots.length === 0 && (
+            <p className="order-form__no-slots">
+              אין שעות איסוף זמינות כרגע. אנא נסו שוב מאוחר יותר.
+            </p>
+          )}
         </div>
       </div>
 
