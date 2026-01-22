@@ -1,0 +1,164 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.cart-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba($black, 0.5);
+  z-index: $z-modal-backdrop;
+}
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  background: $white;
+  z-index: $z-modal;
+  display: flex;
+  flex-direction: column;
+  box-shadow: $shadow-xl;
+  @include fade-in;
+  
+  &__header {
+    @include flex-between;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $border-color;
+  }
+  
+  &__title {
+    @include heading-3;
+  }
+  
+  &__close {
+    font-size: 28px;
+    color: $text-tertiary;
+    
+    &:hover {
+      color: $text-primary;
+    }
+  }
+  
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-md;
+    @include custom-scrollbar;
+  }
+  
+  &__empty {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+    color: $text-secondary;
+    
+    &-icon {
+      font-size: 48px;
+    }
+  }
+  
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__clear {
+    font-size: $font-size-sm;
+    color: $danger;
+    text-align: center;
+    margin-top: $spacing-md;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  &__footer {
+    padding: $spacing-md $spacing-lg;
+    border-top: 1px solid $border-color;
+    background: $surface-light;
+  }
+  
+  &__total {
+    @include flex-between;
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-md;
+    
+    &-price {
+      font-weight: 700;
+      color: $primary;
+      font-size: $font-size-xl;
+    }
+  }
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm;
+  background: $surface-light;
+  border-radius: $radius-md;
+  
+  &__image {
+    width: 60px;
+    height: 60px;
+    border-radius: $radius-md;
+    object-fit: cover;
+  }
+  
+  &__details {
+    flex: 1;
+  }
+  
+  &__name {
+    font-weight: 500;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__price {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+  
+  &__quantity {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+  
+  &__qty-btn {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-full;
+    background: $white;
+    border: 1px solid $border-color;
+    font-size: 16px;
+    
+    &:hover {
+      background: $primary-light;
+      color: $white;
+      border-color: $primary-light;
+    }
+  }
+  
+  &__qty-value {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  &__remove {
+    font-size: 18px;
+    color: $text-tertiary;
+    
+    &:hover {
+      color: $danger;
+    }
+  }
+}

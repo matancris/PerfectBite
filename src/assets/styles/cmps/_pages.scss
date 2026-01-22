@@ -1,0 +1,711 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+// Home Page
+.home-page {
+  @include flex-column;
+  gap: $spacing-xxl;
+}
+
+.hero {
+  text-align: center;
+  padding: $spacing-xxl 0;
+  background: linear-gradient(135deg, rgba($primary, 0.1) 0%, rgba($primary-light, 0.05) 100%);
+  border-radius: $radius-xl;
+  
+  &__content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  &__title {
+    @include heading-1;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__brand {
+    color: $primary;
+  }
+  
+  &__subtitle {
+    font-size: $font-size-lg;
+    color: $text-secondary;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: $spacing-md;
+  }
+}
+
+.features {
+  &__container {
+    @include grid(3, $spacing-lg);
+    
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.feature-card {
+  @include card;
+  padding: $spacing-lg;
+  text-align: center;
+  
+  &__icon {
+    font-size: 48px;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__title {
+    @include heading-3;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__description {
+    color: $text-secondary;
+  }
+}
+
+// Menu Page
+.menu-page {
+  &__header {
+    margin-bottom: $spacing-xl;
+    text-align: center;
+  }
+  
+  &__title {
+    @include heading-2;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__subtitle {
+    color: $text-secondary;
+  }
+  
+  &__loading {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+  }
+}
+
+.menu-grid {
+  @include grid(3, $spacing-lg);
+  
+  @include md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+  
+  &--empty {
+    @include flex-center;
+    padding: $spacing-xxl;
+    color: $text-secondary;
+  }
+}
+
+.menu-item-card {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  &__name {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__description {
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    @include line-clamp(2);
+    flex: 1;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__footer {
+    @include flex-between;
+    margin-top: auto;
+  }
+  
+  &__price {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: $primary;
+  }
+}
+
+// Checkout Page
+.checkout-page {
+  max-width: 900px;
+  margin: 0 auto;
+  
+  &--empty {
+    @include flex-center;
+    min-height: 50vh;
+  }
+  
+  &__title {
+    @include heading-2;
+    margin-bottom: $spacing-xl;
+    text-align: center;
+  }
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: $spacing-xl;
+    
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.empty-cart {
+  @include card;
+  padding: $spacing-xxl;
+  text-align: center;
+  
+  &__icon {
+    font-size: 64px;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__title {
+    @include heading-3;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__text {
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// Order Form
+.order-form {
+  @include card;
+  padding: $spacing-lg;
+  
+  &__steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid $border-color;
+  }
+  
+  &__step {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    color: $text-tertiary;
+    
+    &--active {
+      color: $primary;
+      
+      .order-form__step-number {
+        background: $primary;
+        color: $white;
+      }
+    }
+    
+    &-number {
+      @include flex-center;
+      width: 28px;
+      height: 28px;
+      border-radius: $radius-full;
+      background: $surface-light;
+      font-weight: 600;
+      font-size: $font-size-sm;
+    }
+    
+    &-label {
+      font-weight: 500;
+    }
+    
+    &-line {
+      width: 60px;
+      height: 2px;
+      background: $border-color;
+    }
+  }
+  
+  &__section {
+    margin-bottom: $spacing-lg;
+    
+    &:last-of-type {
+      margin-bottom: $spacing-xl;
+    }
+    
+    &-title {
+      font-size: $font-size-lg;
+      font-weight: 600;
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-sm;
+      border-bottom: 1px solid $border-color;
+    }
+  }
+  
+  &__field {
+    margin-bottom: $spacing-md;
+  }
+}
+
+// Payment Form
+.payment-form {
+  @include card;
+  padding: $spacing-lg;
+  
+  &__header {
+    @include flex-center;
+    gap: $spacing-sm;
+    margin-bottom: $spacing-lg;
+    padding-bottom: $spacing-md;
+    border-bottom: 1px solid $border-color;
+    
+    h3 {
+      font-size: $font-size-lg;
+      font-weight: 600;
+    }
+    
+    .material-symbols-rounded {
+      color: $success;
+    }
+  }
+  
+  &__demo-badge {
+    background: $warning;
+    color: $white;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: 600;
+  }
+  
+  &__card-preview {
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__field {
+    margin-bottom: $spacing-md;
+    
+    label {
+      display: block;
+      font-size: $font-size-sm;
+      font-weight: 500;
+      color: $text-secondary;
+      margin-bottom: $spacing-xs;
+    }
+  }
+  
+  &__card-input {
+    position: relative;
+    
+    .app-input {
+      padding-left: 60px;
+    }
+  }
+  
+  &__card-icon {
+    position: absolute;
+    left: $spacing-md;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: $font-size-sm;
+    color: $text-tertiary;
+  }
+  
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+  
+  &__amount {
+    @include flex-between;
+    padding: $spacing-md;
+    background: $surface-light;
+    border-radius: $radius-md;
+    margin-bottom: $spacing-lg;
+    
+    span {
+      color: $text-secondary;
+    }
+    
+    strong {
+      font-size: $font-size-xl;
+      color: $primary;
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+    
+    .app-button:last-child {
+      flex: 1;
+    }
+  }
+  
+  &__security {
+    @include flex-center;
+    gap: $spacing-xs;
+    font-size: $font-size-xs;
+    color: $text-tertiary;
+    margin-bottom: $spacing-md;
+    
+    .material-symbols-rounded {
+      color: $success;
+    }
+  }
+  
+  &__demo-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    background: rgba($warning, 0.1);
+    border: 1px solid rgba($warning, 0.3);
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    
+    .material-symbols-rounded {
+      color: $warning;
+      flex-shrink: 0;
+    }
+  }
+  
+  &__processing {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+    text-align: center;
+    
+    p {
+      color: $text-secondary;
+    }
+  }
+  
+  &__progress {
+    width: 200px;
+    height: 4px;
+    background: $surface-light;
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+  
+  &__progress-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, $primary, $primary-light);
+    animation: progress 2s ease-in-out infinite;
+  }
+}
+
+@keyframes progress {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+// Credit Card Preview
+.credit-card {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  color: $white;
+  aspect-ratio: 1.6 / 1;
+  max-width: 320px;
+  margin: 0 auto;
+  box-shadow: $shadow-lg;
+  
+  &__top {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+    
+    .material-symbols-rounded {
+      opacity: 0.8;
+    }
+  }
+  
+  &__type {
+    font-size: $font-size-sm;
+    opacity: 0.9;
+  }
+  
+  &__number {
+    font-family: 'Courier New', monospace;
+    font-size: $font-size-lg;
+    letter-spacing: 2px;
+    margin-bottom: $spacing-lg;
+    direction: ltr;
+    text-align: center;
+  }
+  
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  &__holder,
+  &__expiry {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    
+    span:last-child {
+      font-size: $font-size-sm;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+  
+  &__label {
+    font-size: $font-size-xs;
+    opacity: 0.6;
+    text-transform: uppercase;
+  }
+}
+
+// Order Summary
+.order-summary {
+  @include card;
+  padding: $spacing-lg;
+  position: sticky;
+  top: calc($header-height + $spacing-lg);
+  
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__items {
+    margin-bottom: $spacing-md;
+  }
+  
+  &__item {
+    @include flex-between;
+    padding: $spacing-sm 0;
+    border-bottom: 1px solid $border-color;
+    gap: $spacing-md;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    &-info {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-xs;
+      flex: 1;
+    }
+    
+    &-name {
+      font-weight: 500;
+    }
+    
+    &-controls {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+    }
+    
+    &-qty {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+    }
+    
+    &-price {
+      font-weight: 600;
+    }
+  }
+  
+  &__qty-btn {
+    @include flex-center;
+    width: 24px;
+    height: 24px;
+    border-radius: $radius-full;
+    background: $surface-light;
+    border: 1px solid $border-color;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all $transition-fast;
+    
+    &:hover {
+      background: $primary-light;
+      color: $white;
+      border-color: $primary-light;
+    }
+  }
+  
+  &__remove-btn {
+    font-size: 16px;
+    color: $text-tertiary;
+    cursor: pointer;
+    transition: color $transition-fast;
+    
+    &:hover {
+      color: $danger;
+    }
+  }
+  
+  &__divider {
+    height: 1px;
+    background: $border-color;
+    margin: $spacing-md 0;
+  }
+  
+  &__total {
+    @include flex-between;
+    font-size: $font-size-lg;
+    
+    &-label {
+      font-weight: 600;
+    }
+    
+    &-price {
+      font-weight: 700;
+      color: $primary;
+      font-size: $font-size-xl;
+    }
+  }
+}
+
+// Confirmation Page
+.confirmation-page {
+  @include flex-center;
+  min-height: 60vh;
+  
+  &--loading,
+  &--error {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__icon {
+    font-size: 64px;
+  }
+}
+
+.confirmation-card {
+  @include card;
+  padding: $spacing-xl;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  
+  &__icon {
+    font-size: 64px;
+    margin-bottom: $spacing-md;
+  }
+  
+  &__title {
+    @include heading-2;
+    color: $success;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__order-number {
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__details {
+    background: $surface-light;
+    border-radius: $radius-md;
+    padding: $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__row {
+    @include flex-between;
+    padding: $spacing-sm 0;
+    
+    &:not(:last-child) {
+      border-bottom: 1px solid $border-color;
+    }
+    
+    &--total {
+      font-weight: 600;
+      font-size: $font-size-lg;
+      color: $primary;
+    }
+  }
+}
+
+// Login Page
+.login-page {
+  @include flex-center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, $surface-dark 0%, color-mix(in srgb, $surface-dark 70%, black) 100%);
+  padding: $spacing-md;
+}
+
+.login-card {
+  @include card;
+  padding: $spacing-xl;
+  width: 100%;
+  max-width: 400px;
+  
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__logo {
+    font-size: 48px;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__title {
+    @include heading-2;
+    color: $primary;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__subtitle {
+    color: $text-secondary;
+  }
+}
+
+.login-form {
+  &__field {
+    margin-bottom: $spacing-md;
+    
+    label {
+      display: block;
+      font-size: $font-size-sm;
+      font-weight: 500;
+      color: $text-secondary;
+      margin-bottom: $spacing-xs;
+    }
+  }
+  
+  &__submit {
+    margin-top: $spacing-lg;
+  }
+}

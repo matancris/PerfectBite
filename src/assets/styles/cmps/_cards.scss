@@ -1,0 +1,58 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.app-card {
+  @include card;
+  overflow: hidden;
+  
+  &--elevated {
+    box-shadow: $shadow-lg;
+    
+    &:hover {
+      box-shadow: $shadow-xl;
+      transform: translateY(-2px);
+    }
+    
+    transition: box-shadow $transition-normal, transform $transition-normal;
+  }
+  
+  &--outlined {
+    box-shadow: none;
+    border: 1px solid $border-color;
+  }
+  
+  &__image {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  &__content {
+    padding: $spacing-md;
+  }
+  
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin-bottom: $spacing-xs;
+    color: $text-primary;
+  }
+  
+  &__subtitle {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__footer {
+    padding: $spacing-md;
+    border-top: 1px solid $border-color;
+    background: $surface-light;
+  }
+}

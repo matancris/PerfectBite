@@ -1,0 +1,84 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.app-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba($black, 0.5);
+  @include flex-center;
+  z-index: $z-modal-backdrop;
+  padding: $spacing-md;
+  @include fade-in;
+}
+
+.app-dialog {
+  @include card;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  &--sm {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  &--md {
+    width: 100%;
+    max-width: 560px;
+  }
+  
+  &--lg {
+    width: 100%;
+    max-width: 720px;
+  }
+  
+  &--xl {
+    width: 100%;
+    max-width: 960px;
+  }
+  
+  &__header {
+    @include flex-between;
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid $border-color;
+  }
+  
+  &__title {
+    @include heading-3;
+    margin: 0;
+  }
+  
+  &__close {
+    @include flex-center;
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    color: $text-tertiary;
+    border-radius: $radius-md;
+    transition: background $transition-fast, color $transition-fast;
+    
+    &:hover {
+      background: $surface-light;
+      color: $text-primary;
+    }
+  }
+  
+  &__body {
+    padding: $spacing-lg;
+    overflow-y: auto;
+    @include custom-scrollbar;
+  }
+  
+  &__footer {
+    @include flex-between;
+    padding: $spacing-md $spacing-lg;
+    border-top: 1px solid $border-color;
+    background: $surface-light;
+    gap: $spacing-sm;
+    
+    > * {
+      flex: 1;
+    }
+  }
+}

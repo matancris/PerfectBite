@@ -1,0 +1,5 @@
+export { AdminDashboardPage } from './DashboardPage'
+export { AdminOrdersPage } from './OrdersPage'
+export { AdminMenuPage } from './MenuPage'
+export { AdminEventsPage } from './EventsPage'
+export { AdminSettingsPage } from './SettingsPage'

@@ -1,0 +1,69 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.toaster {
+  position: fixed;
+  top: $spacing-lg;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: $z-toast;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 $spacing-md;
+  pointer-events: none;
+}
+
+.toast {
+  @include card;
+  @include flex-between;
+  padding: $spacing-md;
+  pointer-events: auto;
+  @include fade-in;
+  
+  &--success {
+    border-right: 4px solid $success;
+  }
+  
+  &--error {
+    border-right: 4px solid $danger;
+  }
+  
+  &--warning {
+    border-right: 4px solid $warning;
+  }
+  
+  &--info {
+    border-right: 4px solid $primary;
+  }
+  
+  &__content {
+    flex: 1;
+  }
+  
+  &__title {
+    font-weight: 600;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__message {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+  
+  &__close {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    color: $text-tertiary;
+    border-radius: $radius-md;
+    transition: background $transition-fast;
+    
+    &:hover {
+      background: $surface-light;
+    }
+  }
+}

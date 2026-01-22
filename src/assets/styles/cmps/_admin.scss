@@ -1,0 +1,598 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+// Dashboard Page
+.dashboard-page {
+  &--loading {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    min-height: 50vh;
+  }
+  
+  &__title {
+    @include heading-2;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__stats {
+    @include grid(4, $spacing-md);
+    margin-bottom: $spacing-xl;
+    
+    @include md {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: $spacing-lg;
+    
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__chart,
+  &__recent {
+    @include card;
+    padding: $spacing-lg;
+  }
+  
+  &__section-title {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+  }
+}
+
+.stat-card {
+  @include card;
+  padding: $spacing-lg;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  
+  &__icon {
+    font-size: 32px;
+    padding: $spacing-sm;
+    background: rgba($primary, 0.1);
+    border-radius: $radius-md;
+  }
+  
+  &__content {
+    flex: 1;
+  }
+  
+  &__title {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__value {
+    font-size: $font-size-2xl;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0;
+  }
+  
+  &__trend {
+    font-size: $font-size-sm;
+    font-weight: 500;
+    
+    &--up {
+      color: $success;
+    }
+    
+    &--down {
+      color: $danger;
+    }
+  }
+}
+
+.recent-orders {
+  &--empty {
+    @include flex-center;
+    padding: $spacing-lg;
+    color: $text-secondary;
+  }
+  
+  &__list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__item {
+    @include flex-between;
+    padding: $spacing-md 0;
+    border-bottom: 1px solid $border-color;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+  
+  &__name {
+    font-weight: 500;
+  }
+  
+  &__time {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+  
+  &__details {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+  
+  &__amount {
+    font-weight: 600;
+  }
+}
+
+.revenue-chart {
+  height: 250px;
+  
+  &--empty {
+    @include flex-center;
+    color: $text-secondary;
+  }
+  
+  &__bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    gap: $spacing-sm;
+  }
+  
+  &__bar-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+  }
+  
+  &__bar {
+    width: 100%;
+    max-width: 50px;
+    background: linear-gradient(180deg, $primary 0%, $primary-light 100%);
+    border-radius: $radius-sm $radius-sm 0 0;
+    position: relative;
+    transition: height $transition-normal;
+    
+    &:hover {
+      background: linear-gradient(180deg, $primary-dark 0%, $primary 100%);
+    }
+  }
+  
+  &__bar-value {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: $font-size-xs;
+    font-weight: 600;
+    color: $text-secondary;
+    white-space: nowrap;
+    margin-bottom: $spacing-xs;
+  }
+  
+  &__label {
+    font-size: $font-size-xs;
+    color: $text-secondary;
+    margin-top: $spacing-sm;
+    text-align: center;
+  }
+}
+
+// Orders Page
+.orders-page {
+  &__title {
+    @include heading-2;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__filters {
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-md;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__search {
+    flex: 1;
+    max-width: 400px;
+  }
+  
+  &__status-filters {
+    display: flex;
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+  
+  &__loading {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+  }
+}
+
+.status-filter {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-full;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  background: $surface-light;
+  color: $text-secondary;
+  border: 1px solid transparent;
+  transition: all $transition-fast;
+  
+  &:hover {
+    background: color-mix(in srgb, $surface-light 90%, black);
+  }
+  
+  &--active {
+    background: $primary;
+    color: $white;
+  }
+}
+
+.orders-table,
+.menu-items-table,
+.events-table {
+  @include card;
+  overflow-x: auto;
+  
+  &--empty {
+    padding: $spacing-xxl;
+    text-align: center;
+    color: $text-secondary;
+  }
+  
+  table {
+    min-width: 700px;
+  }
+  
+  th {
+    text-align: right;
+    padding: $spacing-md;
+    font-weight: 600;
+    color: $text-secondary;
+    border-bottom: 2px solid $border-color;
+    background: $surface-light;
+    font-size: $font-size-sm;
+  }
+  
+  td {
+    padding: $spacing-md;
+    border-bottom: 1px solid $border-color;
+  }
+  
+  tr:hover td {
+    background: rgba($primary, 0.02);
+  }
+  
+  &__id {
+    font-family: monospace;
+    color: $text-secondary;
+  }
+  
+  &__actions {
+    display: flex;
+    gap: $spacing-xs;
+  }
+  
+  &__image {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-md;
+    object-fit: cover;
+  }
+  
+  &__no-image {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    background: $surface-light;
+    border-radius: $radius-md;
+    font-size: 24px;
+  }
+}
+
+// Order Details Dialog
+.order-details-dialog {
+  &__section {
+    margin-bottom: $spacing-lg;
+    
+    h4 {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: $text-secondary;
+      margin-bottom: $spacing-sm;
+      padding-bottom: $spacing-xs;
+      border-bottom: 1px solid $border-color;
+    }
+  }
+  
+  &__row {
+    @include flex-between;
+    padding: $spacing-xs 0;
+    
+    a {
+      color: $primary;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  
+  &__items {
+    margin-bottom: $spacing-sm;
+  }
+  
+  &__item {
+    @include flex-between;
+    padding: $spacing-sm 0;
+    border-bottom: 1px solid $border-color;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  &__total {
+    @include flex-between;
+    font-weight: 600;
+    font-size: $font-size-lg;
+    margin-top: $spacing-sm;
+    padding-top: $spacing-sm;
+    border-top: 2px solid $border-color;
+  }
+  
+  &__status {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+  
+  &__footer {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: flex-end;
+  }
+}
+
+// Menu Admin Page
+.menu-admin-page {
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__title {
+    @include heading-2;
+  }
+  
+  &__content {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: $spacing-lg;
+    
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  &__loading {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+  }
+}
+
+.categories-panel {
+  @include card;
+  padding: $spacing-md;
+  position: sticky;
+  top: $spacing-lg;
+  
+  &__title {
+    font-size: $font-size-md;
+    font-weight: 600;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px solid $border-color;
+  }
+  
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+  
+  &__item {
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-md;
+    text-align: right;
+    font-weight: 500;
+    color: $text-secondary;
+    transition: all $transition-fast;
+    
+    &:hover {
+      background: $surface-light;
+      color: $text-primary;
+    }
+    
+    &--active {
+      background: $primary;
+      color: $white;
+      
+      &:hover {
+        background: $primary-dark;
+        color: $white;
+      }
+    }
+  }
+}
+
+// Menu Item Dialog
+.menu-item-dialog,
+.event-dialog {
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+  
+  &__field {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    cursor: pointer;
+    
+    input {
+      width: 18px;
+      height: 18px;
+      accent-color: $primary;
+    }
+  }
+  
+  &__footer {
+    display: flex;
+    gap: $spacing-md;
+    justify-content: flex-end;
+  }
+}
+
+// Events Page
+.events-page {
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-lg;
+  }
+  
+  &__title {
+    @include heading-2;
+  }
+  
+  &__loading {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    padding: $spacing-xxl;
+  }
+}
+
+// Settings Page
+.settings-page {
+  max-width: 600px;
+  
+  &--loading {
+    @include flex-center;
+    flex-direction: column;
+    gap: $spacing-md;
+    min-height: 50vh;
+  }
+  
+  &__title {
+    @include heading-2;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.settings-form {
+  @include card;
+  padding: $spacing-lg;
+  
+  &__section {
+    margin-bottom: $spacing-xl;
+    
+    &-title {
+      font-size: $font-size-lg;
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+    }
+    
+    &-desc {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-md;
+      padding-bottom: $spacing-sm;
+      border-bottom: 1px solid $border-color;
+    }
+  }
+  
+  &__field {
+    margin-bottom: $spacing-md;
+    
+    label {
+      display: block;
+      font-size: $font-size-sm;
+      font-weight: 500;
+      color: $text-secondary;
+      margin-bottom: $spacing-xs;
+    }
+  }
+  
+  &__preview {
+    background: $surface-light;
+    border-radius: $radius-md;
+    padding: $spacing-md;
+    margin-bottom: $spacing-lg;
+    
+    h3 {
+      font-size: $font-size-sm;
+      color: $text-secondary;
+      margin-bottom: $spacing-sm;
+    }
+    
+    &-card {
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      background: $white;
+      padding: $spacing-sm $spacing-md;
+      border-radius: $radius-md;
+      box-shadow: $shadow-sm;
+    }
+    
+    &-icon {
+      font-size: 24px;
+    }
+    
+    &-name {
+      font-size: $font-size-lg;
+      font-weight: 700;
+      color: $primary;
+    }
+  }
+  
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
