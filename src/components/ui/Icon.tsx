@@ -1,3 +1,5 @@
+import { icons } from '@/assets/icons'
+
 interface IconProps {
   name: string
   size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
@@ -16,15 +18,34 @@ const sizeMap = {
 export function Icon({ name, size = 'md', filled = false, className = '' }: IconProps) {
   const fontSize = sizeMap[size]
   
+  // Get the appropriate icon (filled version if requested and available)
+  const iconKey = filled && icons[`${name}_filled`] ? `${name}_filled` : name
+  const svgContent = icons[iconKey]
+  
+  if (!svgContent) {
+    console.warn(`Icon "${name}" not found`)
+    return null
+  }
+  
   return (
     <span
-      className={`material-symbols-rounded ${className}`}
+      className={`icon ${className}`}
       style={{
-        fontSize: `${fontSize}px`,
-        fontVariationSettings: filled ? "'FILL' 1" : "'FILL' 0",
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: `${fontSize}px`,
+        height: `${fontSize}px`,
       }}
-    >
-      {name}
-    </span>
+      dangerouslySetInnerHTML={{ 
+        __html: svgContent.replace(
+          'width="24"',
+          `width="${fontSize}"`
+        ).replace(
+          'height="24"',
+          `height="${fontSize}"`
+        )
+      }}
+    />
   )
 }

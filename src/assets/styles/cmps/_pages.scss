@@ -49,7 +49,7 @@
     font-weight: 600;
     margin-bottom: $spacing-lg;
     
-    .material-symbols-outlined {
+    .icon {
       color: $primary;
     }
   }
@@ -455,7 +455,7 @@
       font-weight: 600;
     }
     
-    .material-symbols-rounded {
+    .icon {
       color: $success;
     }
   }
@@ -542,7 +542,7 @@
     color: $text-tertiary;
     margin-bottom: $spacing-md;
     
-    .material-symbols-rounded {
+    .icon {
       color: $success;
     }
   }
@@ -558,7 +558,7 @@
     font-size: $font-size-sm;
     color: $text-secondary;
     
-    .material-symbols-rounded {
+    .icon {
       color: $warning;
       flex-shrink: 0;
     }
@@ -612,7 +612,7 @@
     @include flex-between;
     margin-bottom: $spacing-lg;
     
-    .material-symbols-rounded {
+    .icon {
       opacity: 0.8;
     }
   }
