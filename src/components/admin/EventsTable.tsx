@@ -53,13 +53,13 @@ export function EventsTable({ events, onEdit }: EventsTableProps) {
             
             return (
               <tr key={event.id} className={isPast ? 'events-table__row--past' : ''}>
-                <td>{event.title}</td>
-                <td>{formatDate(event.eventDate)}</td>
-                <td className="events-table__time">
+                <td data-label="כותרת">{event.title}</td>
+                <td data-label="תאריך">{formatDate(event.eventDate)}</td>
+                <td data-label="שעות" className="events-table__time">
                   {event.startTime} - {event.endTime}
                 </td>
-                <td>{formatDate(event.orderDeadline)}</td>
-                <td>
+                <td data-label="מועד אחרון">{formatDate(event.orderDeadline)}</td>
+                <td data-label="סטטוס">
                   {isPast ? (
                     <AppBadge variant="default">הסתיים</AppBadge>
                   ) : (
@@ -68,7 +68,7 @@ export function EventsTable({ events, onEdit }: EventsTableProps) {
                     </AppBadge>
                   )}
                 </td>
-                <td className="events-table__actions">
+                <td data-label="" className="events-table__actions">
                   <AppButton
                     variant="secondary"
                     size="sm"

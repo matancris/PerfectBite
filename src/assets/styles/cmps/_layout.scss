@@ -159,6 +159,18 @@
       padding: $spacing-md;
     }
   }
+  
+  &__overlay {
+    display: none;
+    
+    @include mobile-only {
+      display: block;
+      position: fixed;
+      inset: 0;
+      background: rgba($black, 0.5);
+      z-index: $z-modal-backdrop;
+    }
+  }
 }
 
 .admin-sidebar {
@@ -173,14 +185,47 @@
   z-index: $z-sticky;
   
   @include mobile-only {
+    transform: translateX(100%);
+    transition: transform $transition-normal;
+    z-index: $z-modal;
+    
+    &--open {
+      transform: translateX(0);
+    }
+  }
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: $spacing-xl;
+  }
+  
+  &__close {
     display: none;
+    color: rgba($white, 0.7);
+    padding: $spacing-sm;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: $radius-md;
+    
+    @include mobile-only {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    &:hover,
+    &:active {
+      color: $white;
+      background: rgba($white, 0.1);
+    }
   }
   
   &__logo {
     display: flex;
     align-items: center;
     gap: $spacing-sm;
-    margin-bottom: $spacing-xl;
     
     &-icon {
       font-size: 32px;
@@ -232,14 +277,36 @@
   border-bottom: 1px solid $border-color;
   padding: $spacing-md $spacing-lg;
   
+  @include mobile-only {
+    padding: $spacing-sm $spacing-md;
+  }
+  
   &__container {
     @include flex-between;
+  }
+  
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+  
+  &__menu-btn {
+    display: none;
+    
+    @include mobile-only {
+      display: flex;
+    }
   }
   
   &__title {
     font-size: $font-size-xl;
     font-weight: 600;
     color: $text-primary;
+    
+    @include mobile-only {
+      font-size: $font-size-lg;
+    }
   }
   
   &__user {
@@ -247,9 +314,17 @@
     align-items: center;
     gap: $spacing-md;
     
+    @include mobile-only {
+      gap: $spacing-sm;
+    }
+    
     &-name {
       font-size: $font-size-sm;
       color: $text-secondary;
+      
+      @include mobile-only {
+        display: none;
+      }
     }
   }
   

@@ -1,0 +1,76 @@
+@use '../setup/variables' as *;
+@use '../setup/mixins' as *;
+
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  padding: $spacing-sm;
+  background: $surface-light;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  cursor: pointer;
+  gap: 5px;
+  transition: background $transition-fast, border-color $transition-fast;
+  
+  &:hover,
+  &:active {
+    background: rgba($primary, 0.1);
+    border-color: $primary;
+    
+    .hamburger-btn__line {
+      background: $primary;
+    }
+  }
+  
+  &__line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: $text-primary;
+    border-radius: 2px;
+    transition: transform 0.3s cubic-bezier(0.68, -0.6, 0.32, 1.6),
+                opacity 0.2s ease,
+                width 0.3s ease;
+    transform-origin: center;
+    
+    &:nth-child(1) {
+      transform: translateY(0) rotate(0);
+    }
+    
+    &:nth-child(2) {
+      opacity: 1;
+      width: 20px;
+    }
+    
+    &:nth-child(3) {
+      transform: translateY(0) rotate(0);
+    }
+  }
+  
+  // Open state - transforms into X
+  &--open {
+    background: rgba($primary, 0.1);
+    border-color: $primary;
+    
+    .hamburger-btn__line {
+      background: $primary;
+      
+      &:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      
+      &:nth-child(2) {
+        opacity: 0;
+        width: 0;
+      }
+      
+      &:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+    }
+  }
+}

@@ -22,6 +22,7 @@ import inventory from './inventory.svg?raw'
 import local_pizza from './local_pizza.svg?raw'
 import local_pizza_filled from './local_pizza_filled.svg?raw'
 import lock from './lock.svg?raw'
+import menu from './menu.svg?raw'
 import lock_filled from './lock_filled.svg?raw'
 import remove from './remove.svg?raw'
 import restaurant from './restaurant.svg?raw'
@@ -61,6 +62,7 @@ export const icons: Record<string, string> = {
   local_pizza_filled,
   lock,
   lock_filled,
+  menu,
   remove,
   restaurant,
   restaurant_menu,

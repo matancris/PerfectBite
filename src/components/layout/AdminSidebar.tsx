@@ -11,16 +11,31 @@ const navItems = [
   { path: '/admin/settings', label: 'הגדרות', icon: 'settings' },
 ]
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const business = useBusinessStore((state) => state.business)
   const businessName = business?.name || 'ניהול'
   const logoUrl = business?.settings?.logoUrl
 
   return (
-    <aside className="admin-sidebar">
-      <div className="admin-sidebar__logo">
-        <BusinessLogo logoUrl={logoUrl} size="lg" className="admin-sidebar__logo-icon" />
-        <span className="admin-sidebar__logo-text">{businessName}</span>
+    <aside className={`admin-sidebar ${isOpen ? 'admin-sidebar--open' : ''}`}>
+      <div className="admin-sidebar__header">
+        <div className="admin-sidebar__logo">
+          <BusinessLogo logoUrl={logoUrl} size="lg" className="admin-sidebar__logo-icon" />
+          <span className="admin-sidebar__logo-text">{businessName}</span>
+        </div>
+        <button 
+          type="button"
+          className="admin-sidebar__close"
+          onClick={onClose}
+          aria-label="סגור תפריט"
+        >
+          <Icon name="close" size="lg" />
+        </button>
       </div>
 
       <nav className="admin-sidebar__nav">
@@ -29,6 +44,7 @@ export function AdminSidebar() {
             key={item.path}
             to={item.path}
             end={item.end}
+            onClick={onClose}
             className={({ isActive }) =>
               `admin-sidebar__link ${isActive ? 'admin-sidebar__link--active' : ''}`
             }

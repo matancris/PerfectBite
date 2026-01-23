@@ -1,12 +1,25 @@
 import { useAuthStore } from '@/stores/auth.store'
+import { HamburgerButton } from '@/components/ui'
 
-export function AdminHeader() {
+interface AdminHeaderProps {
+  isMenuOpen: boolean
+  onMenuToggle: () => void
+}
+
+export function AdminHeader({ isMenuOpen, onMenuToggle }: AdminHeaderProps) {
   const { user, signOut } = useAuthStore()
 
   return (
     <header className="admin-header">
       <div className="admin-header__container">
-        <h1 className="admin-header__title">ניהול המערכת</h1>
+        <div className="admin-header__right">
+          <HamburgerButton
+            isOpen={isMenuOpen}
+            onClick={onMenuToggle}
+            className="admin-header__menu-btn"
+          />
+          <h1 className="admin-header__title">ניהול המערכת</h1>
+        </div>
 
         <div className="admin-header__user">
           {user && (

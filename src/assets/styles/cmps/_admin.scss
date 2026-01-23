@@ -1,5 +1,5 @@
-@use '../setup/variables' as *;
-@use '../setup/mixins' as *;
+@use "../setup/variables" as *;
+@use "../setup/mixins" as *;
 
 // Dashboard Page
 .dashboard-page {
@@ -9,41 +9,46 @@
     gap: $spacing-md;
     min-height: 50vh;
   }
-  
+
   &__title {
     @include heading-2;
     margin-bottom: $spacing-xl;
+
+    @include mobile-only {
+      font-size: $font-size-xl;
+      margin-bottom: $spacing-lg;
+    }
   }
-  
+
   &__stats {
     @include grid(4, $spacing-md);
     margin-bottom: $spacing-xl;
-    
+
     @include md {
       grid-template-columns: repeat(2, 1fr);
     }
-    
+
     @include mobile-only {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__content {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: $spacing-lg;
-    
+
     @include mobile-only {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__chart,
   &__recent {
     @include card;
     padding: $spacing-lg;
   }
-  
+
   &__section-title {
     font-size: $font-size-lg;
     font-weight: 600;
@@ -57,39 +62,39 @@
   display: flex;
   align-items: flex-start;
   gap: $spacing-md;
-  
+
   &__icon {
     font-size: 32px;
     padding: $spacing-sm;
     background: rgba($primary, 0.1);
     border-radius: $radius-md;
   }
-  
+
   &__content {
     flex: 1;
   }
-  
+
   &__title {
     font-size: $font-size-sm;
     color: $text-secondary;
     margin-bottom: $spacing-xs;
   }
-  
+
   &__value {
     font-size: $font-size-2xl;
     font-weight: 700;
     color: $text-primary;
     margin: 0;
   }
-  
+
   &__trend {
     font-size: $font-size-sm;
     font-weight: 500;
-    
+
     &--up {
       color: $success;
     }
-    
+
     &--down {
       color: $danger;
     }
@@ -102,43 +107,43 @@
     padding: $spacing-lg;
     color: $text-secondary;
   }
-  
+
   &__list {
     display: flex;
     flex-direction: column;
   }
-  
+
   &__item {
     @include flex-between;
     padding: $spacing-md 0;
     border-bottom: 1px solid $border-color;
-    
+
     &:last-child {
       border-bottom: none;
     }
   }
-  
+
   &__info {
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
   }
-  
+
   &__name {
     font-weight: 500;
   }
-  
+
   &__time {
     font-size: $font-size-sm;
     color: $text-secondary;
   }
-  
+
   &__details {
     display: flex;
     align-items: center;
     gap: $spacing-sm;
   }
-  
+
   &__amount {
     font-weight: 600;
   }
@@ -146,12 +151,12 @@
 
 .revenue-chart {
   height: 250px;
-  
+
   &--empty {
     @include flex-center;
     color: $text-secondary;
   }
-  
+
   &__bars {
     display: flex;
     align-items: flex-end;
@@ -159,7 +164,7 @@
     height: 100%;
     gap: $spacing-sm;
   }
-  
+
   &__bar-container {
     flex: 1;
     display: flex;
@@ -167,7 +172,7 @@
     align-items: center;
     height: 100%;
   }
-  
+
   &__bar {
     width: 100%;
     max-width: 50px;
@@ -175,12 +180,12 @@
     border-radius: $radius-sm $radius-sm 0 0;
     position: relative;
     transition: height $transition-normal;
-    
+
     &:hover {
       background: linear-gradient(180deg, $primary-dark 0%, $primary 100%);
     }
   }
-  
+
   &__bar-value {
     position: absolute;
     bottom: 100%;
@@ -192,7 +197,7 @@
     white-space: nowrap;
     margin-bottom: $spacing-xs;
   }
-  
+
   &__label {
     font-size: $font-size-xs;
     color: $text-secondary;
@@ -207,25 +212,25 @@
     @include heading-2;
     margin-bottom: $spacing-lg;
   }
-  
+
   &__filters {
     @include flex-between;
     flex-wrap: wrap;
     gap: $spacing-md;
     margin-bottom: $spacing-lg;
   }
-  
+
   &__search {
     flex: 1;
     max-width: 400px;
   }
-  
+
   &__status-filters {
     display: flex;
     gap: $spacing-xs;
     flex-wrap: wrap;
   }
-  
+
   &__loading {
     @include flex-center;
     flex-direction: column;
@@ -243,14 +248,22 @@
   color: $text-secondary;
   border: 1px solid transparent;
   transition: all $transition-fast;
-  
+
   &:hover {
     background: color-mix(in srgb, $surface-light 90%, black);
   }
-  
+
   &--active {
     background: $primary;
     color: $white;
+  }
+}
+
+.orders-table {
+  tr {
+    @include mobile-only {
+      align-items: flex-start;
+    }
   }
 }
 
@@ -259,18 +272,30 @@
 .events-table {
   @include card;
   overflow-x: auto;
-  
+
+  @include mobile-only {
+    overflow-x: visible;
+  }
+
   &--empty {
     padding: $spacing-xxl;
     text-align: center;
     color: $text-secondary;
+
+    @include mobile-only {
+      padding: $spacing-lg;
+    }
   }
-  
+
   table {
     width: 100%;
     min-width: 700px;
+
+    @include mobile-only {
+      min-width: 0;
+    }
   }
-  
+
   th {
     text-align: right;
     padding: $spacing-md;
@@ -279,36 +304,107 @@
     border-bottom: 2px solid $border-color;
     background: $surface-light;
     font-size: $font-size-sm;
+
+    @include mobile-only {
+      display: none;
+    }
   }
-  
+
+  thead {
+    @include mobile-only {
+      display: none;
+    }
+  }
+
+  tbody {
+    @include mobile-only {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+  }
+
+  tr {
+    @include mobile-only {
+      display: flex;
+      flex-direction: column;
+      background: $white;
+      border-radius: $radius-md;
+      border: 1px solid $border-color;
+      padding: $spacing-md;
+      gap: $spacing-sm;
+    }
+  }
+
   td {
     padding: $spacing-md;
     border-bottom: 1px solid $border-color;
     vertical-align: middle;
+
+    @include mobile-only {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: $spacing-xs 0;
+      border-bottom: none;
+
+      &::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: $text-secondary;
+        font-size: $font-size-sm;
+        margin-left: $spacing-md;
+      }
+
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &:last-child {
+        padding-bottom: 0;
+        border-top: 1px solid $border-color;
+        padding-top: $spacing-sm;
+        margin-top: $spacing-xs;
+      }
+    }
   }
-  
+
   tr:hover td {
     background: rgba($primary, 0.02);
+
+    @include mobile-only {
+      background: transparent;
+    }
   }
-  
+
   &__id {
     font-family: monospace;
     color: $text-secondary;
   }
-  
+
   &__actions {
     display: flex;
     align-items: center;
     gap: $spacing-xs;
+
+    @include mobile-only {
+      justify-content: flex-end;
+      width: 100%;
+    }
   }
-  
+
   &__image {
     width: 48px;
     height: 48px;
     border-radius: $radius-md;
     object-fit: cover;
+
+    @include mobile-only {
+      width: 60px;
+      height: 60px;
+    }
   }
-  
+
   &__no-image {
     @include flex-center;
     width: 48px;
@@ -316,6 +412,11 @@
     background: $surface-light;
     border-radius: $radius-md;
     font-size: 24px;
+
+    @include mobile-only {
+      width: 60px;
+      height: 60px;
+    }
   }
 }
 
@@ -323,7 +424,7 @@
 .order-details-dialog {
   &__section {
     margin-bottom: $spacing-lg;
-    
+
     h4 {
       font-size: $font-size-md;
       font-weight: 600;
@@ -333,34 +434,34 @@
       border-bottom: 1px solid $border-color;
     }
   }
-  
+
   &__row {
     @include flex-between;
     padding: $spacing-xs 0;
-    
+
     a {
       color: $primary;
-      
+
       &:hover {
         text-decoration: underline;
       }
     }
   }
-  
+
   &__items {
     margin-bottom: $spacing-sm;
   }
-  
+
   &__item {
     @include flex-between;
     padding: $spacing-sm 0;
     border-bottom: 1px solid $border-color;
-    
+
     &:last-child {
       border-bottom: none;
     }
   }
-  
+
   &__total {
     @include flex-between;
     font-weight: 600;
@@ -369,13 +470,13 @@
     padding-top: $spacing-sm;
     border-top: 2px solid $border-color;
   }
-  
+
   &__status {
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
   }
-  
+
   &__footer {
     display: flex;
     gap: $spacing-md;
@@ -388,22 +489,32 @@
   &__header {
     @include flex-between;
     margin-bottom: $spacing-lg;
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-md;
+    }
   }
-  
+
   &__title {
     @include heading-2;
+
+    @include mobile-only {
+      font-size: $font-size-xl;
+    }
   }
-  
+
   &__content {
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: $spacing-lg;
-    
+
     @include mobile-only {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__loading {
     @include flex-center;
     flex-direction: column;
@@ -417,21 +528,42 @@
   padding: $spacing-md;
   position: sticky;
   top: $spacing-lg;
-  
+
+  @include mobile-only {
+    position: static;
+    margin-bottom: $spacing-md;
+  }
+
   &__title {
     font-size: $font-size-md;
     font-weight: 600;
     margin-bottom: $spacing-md;
     padding-bottom: $spacing-sm;
     border-bottom: 1px solid $border-color;
+
+    @include mobile-only {
+      display: none;
+    }
   }
-  
+
   &__list {
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
+
+    @include mobile-only {
+      flex-direction: row;
+      overflow-x: auto;
+      gap: $spacing-sm;
+      padding-bottom: $spacing-xs;
+      -webkit-overflow-scrolling: touch;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
   }
-  
+
   &__item {
     padding: $spacing-sm $spacing-md;
     border-radius: $radius-md;
@@ -439,16 +571,26 @@
     font-weight: 500;
     color: $text-secondary;
     transition: all $transition-fast;
-    
+
+    @include mobile-only {
+      white-space: nowrap;
+      flex-shrink: 0;
+      border: 1px solid $border-color;
+    }
+
     &:hover {
       background: $surface-light;
       color: $text-primary;
     }
-    
+
     &--active {
       background: $primary;
       color: $white;
-      
+
+      @include mobile-only {
+        border-color: $primary;
+      }
+
       &:hover {
         background: $primary-dark;
         color: $white;
@@ -465,13 +607,13 @@
     flex-direction: column;
     gap: $spacing-md;
   }
-  
+
   &__section {
     border: 1px solid $border-color;
     border-radius: $radius-md;
     padding: $spacing-md;
     margin-bottom: $spacing-md;
-    
+
     &-title {
       display: flex;
       align-items: center;
@@ -481,29 +623,33 @@
       margin-bottom: $spacing-md;
       padding-bottom: $spacing-sm;
       border-bottom: 1px solid $border-color;
-      
+
       .icon {
         color: $primary;
       }
     }
   }
-  
+
   &__row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
   }
-  
+
   &__field {
     display: flex;
     flex-direction: column;
     margin-bottom: $spacing-md;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
   }
-  
+
   &__checkbox {
     display: flex;
     align-items: center;
@@ -512,57 +658,57 @@
     padding: $spacing-sm;
     background: $surface-light;
     border-radius: $radius-md;
-    
+
     input {
       width: 18px;
       height: 18px;
       accent-color: $primary;
     }
   }
-  
+
   &__section-hint {
     font-size: $font-size-sm;
     color: $text-secondary;
     margin-bottom: $spacing-md;
   }
-  
+
   &__hint {
     font-size: $font-size-xs;
     color: $text-tertiary;
     margin-top: $spacing-xs;
     padding-right: $spacing-sm;
   }
-  
+
   &__slot-generator {
     background: $surface-light;
     padding: $spacing-md;
     border-radius: $radius-md;
     margin-bottom: $spacing-md;
-    
+
     &-row {
       display: flex;
       align-items: flex-end;
       gap: $spacing-md;
       flex-wrap: wrap;
     }
-    
+
     &-field {
       display: flex;
       flex-direction: column;
       gap: $spacing-xs;
-      
+
       label {
         font-size: $font-size-xs;
         color: $text-secondary;
       }
-      
+
       input {
         width: 80px;
         padding: $spacing-xs $spacing-sm;
         border: 1px solid $border-color;
         border-radius: $radius-sm;
         text-align: center;
-        
+
         &:focus {
           border-color: $primary;
           outline: none;
@@ -570,7 +716,7 @@
       }
     }
   }
-  
+
   &__empty-slots {
     @include flex-center;
     flex-direction: column;
@@ -581,13 +727,13 @@
     color: $text-secondary;
     text-align: center;
     margin-bottom: $spacing-sm;
-    
+
     span {
       font-size: $font-size-sm;
       opacity: 0.7;
     }
   }
-  
+
   &__slots-list {
     display: flex;
     flex-wrap: wrap;
@@ -596,7 +742,7 @@
     overflow-y: auto;
     margin-bottom: $spacing-sm;
   }
-  
+
   &__slot {
     display: flex;
     align-items: center;
@@ -605,7 +751,7 @@
     background: $white;
     border: 1px solid $border-color;
     border-radius: $radius-md;
-    
+
     &-time {
       input {
         width: 80px;
@@ -614,24 +760,24 @@
         border-radius: $radius-sm;
         font-size: $font-size-sm;
         text-align: center;
-        
+
         &:focus {
           border-color: $primary;
           outline: none;
         }
       }
     }
-    
+
     &-max {
       display: flex;
       align-items: center;
       gap: $spacing-xs;
-      
+
       label {
         font-size: $font-size-xs;
         color: $text-secondary;
       }
-      
+
       input {
         width: 50px;
         padding: $spacing-xs;
@@ -639,44 +785,44 @@
         border-radius: $radius-sm;
         font-size: $font-size-sm;
         text-align: center;
-        
+
         &:focus {
           border-color: $primary;
           outline: none;
         }
       }
     }
-    
+
     &-remove {
       color: $text-tertiary;
       padding: $spacing-xs;
       cursor: pointer;
       background: none;
       border: none;
-      
+
       &:hover {
         color: $danger;
       }
     }
   }
-  
+
   &__item-selector {
     margin-bottom: $spacing-md;
-    
+
     select {
       width: 100%;
       padding: $spacing-sm $spacing-md;
       border: 1px solid $border-color;
       border-radius: $radius-md;
       font-size: $font-size-md;
-      
+
       &:focus {
         border-color: $primary;
         outline: none;
       }
     }
   }
-  
+
   &__empty-items {
     @include flex-center;
     flex-direction: column;
@@ -686,13 +832,13 @@
     border-radius: $radius-md;
     color: $text-secondary;
     text-align: center;
-    
+
     span {
       font-size: $font-size-sm;
       opacity: 0.7;
     }
   }
-  
+
   &__items-list {
     display: flex;
     flex-direction: column;
@@ -700,7 +846,7 @@
     max-height: 250px;
     overflow-y: auto;
   }
-  
+
   &__item {
     display: flex;
     align-items: center;
@@ -708,14 +854,14 @@
     padding: $spacing-sm;
     background: $surface-light;
     border-radius: $radius-md;
-    
+
     &-image {
       width: 40px;
       height: 40px;
       border-radius: $radius-sm;
       object-fit: cover;
     }
-    
+
     &-info {
       flex: 1;
       min-width: 0;
@@ -723,56 +869,56 @@
       flex-direction: column;
       gap: 2px;
     }
-    
+
     &-name {
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
+
     &-price {
       font-size: $font-size-sm;
       color: $primary;
     }
-    
+
     &-quantity {
       display: flex;
       align-items: center;
       gap: $spacing-xs;
-      
+
       label {
         font-size: $font-size-xs;
         color: $text-secondary;
       }
-      
+
       input {
         width: 60px;
         padding: $spacing-xs $spacing-sm;
         border: 1px solid $border-color;
         border-radius: $radius-sm;
         text-align: center;
-        
+
         &:focus {
           border-color: $primary;
           outline: none;
         }
       }
     }
-    
+
     &-remove {
       color: $text-tertiary;
       padding: $spacing-xs;
       background: none;
       border: none;
       cursor: pointer;
-      
+
       &:hover {
         color: $danger;
       }
     }
   }
-  
+
   &__footer {
     display: flex;
     gap: $spacing-md;
@@ -785,12 +931,22 @@
   &__header {
     @include flex-between;
     margin-bottom: $spacing-lg;
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-md;
+    }
   }
-  
+
   &__title {
     @include heading-2;
+
+    @include mobile-only {
+      font-size: $font-size-xl;
+    }
   }
-  
+
   &__loading {
     @include flex-center;
     flex-direction: column;
@@ -802,14 +958,14 @@
 // Settings Page
 .settings-page {
   max-width: 600px;
-  
+
   &--loading {
     @include flex-center;
     flex-direction: column;
     gap: $spacing-md;
     min-height: 50vh;
   }
-  
+
   &__title {
     @include heading-2;
     margin-bottom: $spacing-xl;
@@ -819,16 +975,16 @@
 .settings-form {
   @include card;
   padding: $spacing-lg;
-  
+
   &__section {
     margin-bottom: $spacing-xl;
-    
+
     &-title {
       font-size: $font-size-lg;
       font-weight: 600;
       margin-bottom: $spacing-xs;
     }
-    
+
     &-desc {
       font-size: $font-size-sm;
       color: $text-secondary;
@@ -837,10 +993,10 @@
       border-bottom: 1px solid $border-color;
     }
   }
-  
+
   &__field {
     margin-bottom: $spacing-md;
-    
+
     label {
       display: block;
       font-size: $font-size-sm;
@@ -849,19 +1005,19 @@
       margin-bottom: $spacing-xs;
     }
   }
-  
+
   &__preview {
     background: $surface-light;
     border-radius: $radius-md;
     padding: $spacing-md;
     margin-bottom: $spacing-lg;
-    
+
     h3 {
       font-size: $font-size-sm;
       color: $text-secondary;
       margin-bottom: $spacing-sm;
     }
-    
+
     &-card {
       display: flex;
       align-items: center;
@@ -871,18 +1027,18 @@
       border-radius: $radius-md;
       box-shadow: $shadow-sm;
     }
-    
+
     &-icon {
       font-size: 24px;
     }
-    
+
     &-name {
       font-size: $font-size-lg;
       font-weight: 700;
       color: $primary;
     }
   }
-  
+
   &__actions {
     display: flex;
     justify-content: flex-end;
@@ -894,29 +1050,39 @@
   &__header {
     @include flex-between;
     margin-bottom: $spacing-xl;
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $spacing-md;
+    }
   }
-  
+
   &__title {
     @include heading-2;
+
+    @include mobile-only {
+      font-size: $font-size-xl;
+    }
   }
-  
+
   &__content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $spacing-xl;
-    
+
     @media (max-width: 900px) {
       grid-template-columns: 1fr;
     }
   }
-  
+
   &__generator,
   &__list {
     .app-card {
       padding: $spacing-lg;
     }
   }
-  
+
   &__section-title {
     display: flex;
     align-items: center;
@@ -924,38 +1090,38 @@
     font-size: $font-size-lg;
     font-weight: 600;
     margin-bottom: $spacing-sm;
-    
+
     .icon {
       color: $primary;
     }
   }
-  
+
   &__section-desc {
     font-size: $font-size-sm;
     color: $text-secondary;
     margin-bottom: $spacing-lg;
   }
-  
+
   &__form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: $spacing-md;
     margin-bottom: $spacing-md;
   }
-  
+
   &__form-field {
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
     margin-bottom: $spacing-md;
-    
+
     label {
       font-size: $font-size-sm;
       font-weight: 500;
       color: $text-secondary;
     }
   }
-  
+
   &__warning {
     display: flex;
     align-items: center;
@@ -966,12 +1132,12 @@
     padding: $spacing-sm;
     background: rgba($warning, 0.1);
     border-radius: $radius-md;
-    
+
     .icon {
       font-size: 16px;
     }
   }
-  
+
   &__loading,
   &__empty {
     @include flex-center;
@@ -980,19 +1146,19 @@
     padding: $spacing-xl;
     color: $text-secondary;
     text-align: center;
-    
+
     span {
       font-size: $font-size-sm;
       opacity: 0.7;
     }
   }
-  
+
   &__slots {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: $spacing-md;
   }
-  
+
   &__modal-overlay {
     position: fixed;
     inset: 0;
@@ -1000,21 +1166,21 @@
     @include flex-center;
     z-index: 100;
   }
-  
+
   &__modal {
     background: $white;
     padding: $spacing-xl;
     border-radius: $radius-lg;
     min-width: 320px;
     max-width: 90vw;
-    
+
     h3 {
       font-size: $font-size-lg;
       font-weight: 600;
       margin-bottom: $spacing-lg;
     }
   }
-  
+
   &__modal-actions {
     display: flex;
     gap: $spacing-md;
@@ -1031,17 +1197,17 @@
   border-radius: $radius-lg;
   border: 1px solid $border-color;
   transition: all $transition-fast;
-  
+
   &:hover {
     border-color: $primary-light;
     box-shadow: $shadow-sm;
   }
-  
+
   &--full {
     background: rgba($danger, 0.05);
     border-color: rgba($danger, 0.3);
   }
-  
+
   &__time {
     display: flex;
     align-items: center;
@@ -1050,45 +1216,45 @@
     font-weight: 700;
     color: $primary;
     margin-bottom: $spacing-sm;
-    
+
     .icon {
       color: $text-secondary;
     }
   }
-  
+
   &__stats {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: $spacing-sm;
   }
-  
+
   &__count {
     display: flex;
     align-items: baseline;
     gap: 2px;
   }
-  
+
   &__current {
     font-size: $font-size-lg;
     font-weight: 600;
     color: $text-primary;
   }
-  
+
   &__separator {
     color: $text-tertiary;
   }
-  
+
   &__max {
     font-size: $font-size-sm;
     color: $text-secondary;
   }
-  
+
   &__label {
     font-size: $font-size-xs;
     color: $text-tertiary;
   }
-  
+
   &__progress {
     height: 4px;
     background: $border-color;
@@ -1096,18 +1262,18 @@
     overflow: hidden;
     margin-top: $spacing-sm;
   }
-  
+
   &__progress-bar {
     height: 100%;
     background: $primary;
     border-radius: $radius-full;
     transition: width $transition-normal;
-    
+
     .pickup-slot-card--full & {
       background: $danger;
     }
   }
-  
+
   &__badge {
     position: absolute;
     top: $spacing-sm;
@@ -1119,7 +1285,7 @@
     font-weight: 600;
     border-radius: $radius-sm;
   }
-  
+
   &__delete {
     position: absolute;
     top: $spacing-sm;
@@ -1131,7 +1297,7 @@
     cursor: pointer;
     border-radius: $radius-sm;
     transition: all $transition-fast;
-    
+
     &:hover {
       color: $danger;
       background: rgba($danger, 0.1);

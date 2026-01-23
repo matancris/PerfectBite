@@ -48,7 +48,7 @@ export function MenuItemsTable({ items, onEdit }: MenuItemsTableProps) {
         <tbody>
           {items.map((item) => (
             <tr key={item.id}>
-              <td>
+              <td data-label="תמונה">
                 {item.imageUrl ? (
                   <img
                     src={item.imageUrl}
@@ -59,19 +59,19 @@ export function MenuItemsTable({ items, onEdit }: MenuItemsTableProps) {
                   <Icon name="restaurant" size="lg" className="menu-items-table__no-image" />
                 )}
               </td>
-              <td>{item.name}</td>
-              <td>{formatCurrency(item.price)}</td>
-              <td>
+              <td data-label="שם">{item.name}</td>
+              <td data-label="מחיר">{formatCurrency(item.price)}</td>
+              <td data-label="סטטוס">
                 <AppBadge variant={item.isActive ? 'success' : 'default'}>
                   {item.isActive ? 'פעיל' : 'לא פעיל'}
                 </AppBadge>
               </td>
-              <td>
+              <td data-label="זמינות">
                 <AppBadge variant={item.availableAnytime ? 'info' : 'warning'}>
                   {item.availableAnytime ? 'תמיד' : 'אירועים'}
                 </AppBadge>
               </td>
-              <td>
+              <td data-label="">
                 <div className="menu-items-table__actions">
                   <AppButton variant="ghost" size="sm" onClick={() => onEdit(item)}>
                     ערוך
