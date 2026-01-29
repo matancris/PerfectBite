@@ -30,13 +30,16 @@ export function CustomerHeader() {
               <span className="customer-header__cart-badge">{itemCount}</span>
             )}
           </Link>
-          <Link 
-            to={user ? '/admin' : '/login'} 
-            className="customer-header__admin-link"
-            title={user ? 'לוח בקרה' : 'כניסת מנהל'}
-          >
-            <Icon name={user ? 'dashboard' : 'lock'} size="md" />
-          </Link>
+          {user ? (
+            <Link to="/admin" className="customer-header__admin-button">
+              <Icon name="dashboard" size="sm" />
+              <span>מעבר לניהול</span>
+            </Link>
+          ) : (
+            <Link to="/login" className="customer-header__login-link">
+              <Icon name="lock" size="sm" />
+            </Link>
+          )}
         </nav>
       </div>
     </header>

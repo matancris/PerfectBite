@@ -86,7 +86,32 @@
     }
   }
   
-  &__admin-link {
+  &__admin-button {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-xs $spacing-md;
+    background: $primary;
+    color: $white;
+    font-weight: 600;
+    font-size: $font-size-sm;
+    border-radius: $radius-full;
+    transition: all $transition-fast;
+    white-space: nowrap;
+    
+    &:hover {
+      background: $primary-dark;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba($primary, 0.3);
+    }
+    
+    @include mobile-only {
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-xs;
+    }
+  }
+  
+  &__login-link {
     font-size: 20px;
     opacity: 0.6;
     transition: opacity $transition-fast;
